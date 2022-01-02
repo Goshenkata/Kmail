@@ -1,0 +1,11 @@
+﻿#jumbotron {
+    background-image: url("/images/homebackground2.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+@media only screen and (min-width: 576px) {
+    #jumbotron {
+        padding-bottom: 100px;
+    }
+}

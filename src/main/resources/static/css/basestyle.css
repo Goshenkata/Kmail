@@ -3,7 +3,18 @@
     height: auto;
 }
 
-#white-icon {
+#language-icon {
     color: lightgray;
     font-size: 1.5em;
+}
+
+.footer-icon {
+    font-size: 6em;
+    display: contents;
+    text-decoration: none;
+    color: lightgray;
+}
+
+.footer-icon:hover {
+    color: darkcyan;
 }
