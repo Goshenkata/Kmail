@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -27,12 +28,28 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .authorizeRequests()
                 //allows access to all static resources
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 //allow everyone to access the index page
                 .antMatchers("/").permitAll()
                 //everything else is available to authenticated users
-                .antMatchers("/**").authenticated();
+                .antMatchers("/**").authenticated()
+                //configure the login page
+                .and()
+                .formLogin()
+                .loginPage("/users/login")
+                .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
+                .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
+                .defaultSuccessUrl("/")
+                .failureForwardUrl("/users/login-error")
+                //configure log out
+                .and()
+                .logout()
+                .logoutUrl("/users/logout")
+                //post-logout cleanup
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
     }
 }
