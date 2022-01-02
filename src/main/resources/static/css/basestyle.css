@@ -2,3 +2,9 @@
     width: 32px;
     height: auto;
 }
+
+#white-icon {
+    color: lightgray;
+    font-size: 1.5em;
+
+}

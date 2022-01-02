@@ -4,22 +4,26 @@
     <meta charset="UTF-8">
     <title>Kmail</title>
     <link rel="shortcut icon" th:href="@{images/k.png}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{css/basestyle.css}">
+    <script src="https://kit.fontawesome.com/804ea2455c.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-sm navbar-dark light bg-dark">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
             <img th:src="@{images/k.png}" id="logo">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav ">
+                <!-- navbar buttons-->
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Login</a>
+                    <a class="nav-link active" aria-current="page" href="/users/login" th:text="#{login}"></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Register</a>
@@ -30,6 +34,19 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
                 </li>
+                <!-- i18 form -->
+                <div class="my-2">
+                    <i class="fas fa-globe" id="white-icon"></i>
+                    <form th:method="get">
+                        <select
+                                onchange="this.form.submit()"
+                                id="lang"
+                                name="lang">
+                            <option value="en_US" th:selected="${#locale.toString()} == 'en_US'">English</option>
+                            <option value="bg_BG" th:selected="${#locale.toString()} == 'bg_BG'">Български</option>
+                        </select>
+                    </form>
+                </div>
             </ul>
         </div>
     </div>
@@ -41,7 +58,11 @@
     </div>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+        crossorigin="anonymous"></script>
 </body>
 </html>
