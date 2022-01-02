@@ -10,47 +10,51 @@
     <script src="https://kit.fontawesome.com/804ea2455c.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
             <img th:src="@{images/k.png}" id="logo">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ">
-                <!-- navbar buttons-->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/users/login" th:text="#{login}"></a>
+                    <a class="nav-link active" aria-current="page" th:href="@{users/login}" th:text="#{login}"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Register</a>
+                    <a class="nav-link" href="/users/register" th:text="#{registration}"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Inbox</a>
+                    <a class="nav-link" href="#" th:text="#{sendEmail}"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link" href="#" th:text="#{inbox}"></a>
                 </li>
-                <!-- i18 form -->
-                <div class="my-2">
-                    <i class="fas fa-globe" id="white-icon"></i>
-                    <form th:method="get">
-                        <select
-                                onchange="this.form.submit()"
-                                id="lang"
-                                name="lang">
-                            <option value="en_US" th:selected="${#locale.toString()} == 'en_US'">English</option>
-                            <option value="bg_BG" th:selected="${#locale.toString()} == 'bg_BG'">Български</option>
-                        </select>
-                    </form>
-                </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:text="#{sent}"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:text="#{about}"></a>
+                </li>
             </ul>
+            <form class="d-flex">
+                <i class="fas fa-globe mt-1 me-2" id="white-icon"></i>
+                <select
+                        onchange="this.form.submit()"
+                        id="lang"
+                        name="lang">
+                    <option value="en_US" th:selected="${#locale.toString()} == 'en_US'">English</option>
+                    <option value="bg_BG" th:selected="${#locale.toString()} == 'bg_BG'">Български</option>
+                </select>
+            </form>
+            </form>
         </div>
     </div>
 </nav>
+
+
 
 <main>
     <div class="container-fluid">
