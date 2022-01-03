@@ -1,6 +1,7 @@
 package com.app.Kmail.controllers;
 
 import com.app.Kmail.model.binding.UserRegistrationBindingModel;
+import com.app.Kmail.model.service.UserRegistrationServiceModel;
 import com.app.Kmail.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -53,12 +54,22 @@ public class UsersController {
             }
             return "redirect:/users/register";
         }
+        userService.registerAndLoginUser(registerBindingToService(userRegistrationBindingModel));
         return "redirect:/";
     }
 
     @ModelAttribute("userRegistrationBindingModel")
     public UserRegistrationBindingModel userRegistrationBindingModel() {
         return new UserRegistrationBindingModel();
+    }
+
+    private UserRegistrationServiceModel registerBindingToService(UserRegistrationBindingModel bindingModel) {
+        UserRegistrationServiceModel serviceModel = new UserRegistrationServiceModel();
+        serviceModel.setUsername(bindingModel.getUsername())
+                .setPassword(bindingModel.getPassword())
+                .setFirstName(bindingModel.getFirstName())
+                .setLastName(bindingModel.getLastName());
+        return serviceModel;
     }
 
 }

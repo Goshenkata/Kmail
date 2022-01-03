@@ -1,6 +1,7 @@
 package com.app.Kmail.model.binding;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserRegistrationBindingModel {
@@ -8,6 +9,7 @@ public class UserRegistrationBindingModel {
     @Size(min = 5, max = 20)
     private String username;
     @NotNull
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
     @Size(min = 8, max = 32)
     private String password;
     private String confirmPassword;
