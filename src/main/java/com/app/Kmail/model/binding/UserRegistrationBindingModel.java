@@ -1,10 +1,20 @@
 package com.app.Kmail.model.binding;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class UserRegistrationBindingModel {
+    @NotNull
+    @Size(min = 5, max = 20)
     private String username;
+    @NotNull
+    @Size(min = 8, max = 32)
     private String password;
     private String confirmPassword;
+    @NotNull
+    @Size(min = 3, max = 32)
     private String firstName;
+    @NotNull @Size(min = 3, max = 32) String lastName;
 
     public UserRegistrationBindingModel setUsername(String username) {
         this.username = username;
@@ -56,5 +66,5 @@ public class UserRegistrationBindingModel {
         return lastName;
     }
 
-    String lastName;
+
 }

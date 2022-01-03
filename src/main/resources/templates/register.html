@@ -27,10 +27,10 @@
                             th:errorclass="is-invalid">
                     <small class="col-2">@kmail.com</small>
             </div>
-            <p class="errors alert alert-danger" th:text="#{invalidEmailInput}"></p>
+            <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidEmailInput}"></p>
             <!--The username must not contain special characters like @-->
-            <p class="errors alert alert-danger" th:text="#{specialCharacters}"></p>
-            <p class="errors alert alert-danger" th:text="#{emailTaken}"></p>
+            <p class="errors alert alert-danger" th:text="#{specialCharacters}" th:if="${containsSpecialChars}"></p>
+            <p class="errors alert alert-danger" th:text="#{emailTaken}" th:if="${usernameTaken}"></p>
         </div>
 
         <!--PASSWORD-->
@@ -42,7 +42,7 @@
                    th:field="*{password}"
                    th:errorclass="is-invalid"
                    th:placeholder="#{password}">
-            <p class="errors alert alert-danger" th:text="#{invalidPassword}"></p>
+            <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidPassword}"></p>
         </div>
 
         <!--CONFIRM PASSWORD-->
@@ -54,7 +54,7 @@
                    th:field="*{confirmPassword}"
                    th:errorclass="is-invalid"
                    th:placeholder="#{retype}">
-            <p class="errors alert alert-danger" th:text="#{invalidConfirmPassword}"></p>
+            <p class="errors alert alert-danger" th:text="#{invalidConfirmPassword}" th:if="${passwordsRepeated}"></p>
         </div>
 
         <!--FIRST NAME-->
@@ -66,7 +66,7 @@
                     th:field="*{firstName}"
                     th:errorclass="is-invalid"
                     th:placeholder="#{yourFirstName}">
-            <p class="errors alert alert-danger" th:text="#{invalidName}"></p>
+            <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidName}"></p>
         </div>
 
         <!--LAST NAME-->
@@ -78,7 +78,7 @@
                     th:field="*{lastName}"
                     th:errorclass="is-invalid"
                     th:placeholder="#{yourLastName}">
-            <p class="errors alert alert-danger" th:text="#{invalidName}"></p>
+            <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidName}"></p>
         </div>
 
         <button type="submit" class="btn btn-primary" th:text="#{register}"></button>
