@@ -9,73 +9,76 @@
 </nav>
 
 <main class="container-fluid d-flex justify-content-center">
-    <form class="text-light"
+    <form class="text-light col-6 container-fluid"
           th:action="@{/users/register}"
           th:method="post"
           th:object="${userRegistrationBindingModel}"
     >
+        <h1 class="text-center fw-bold" th:text="#{registration}"></h1>
         <!--EMAIL-->
         <div class="form-group mb-2">
             <label for="username" th:text="#{emailInput}"></label>
-            <input
-                   class="form-control"
-                   id="username"
-                   th:placeholder="#{emailPlaceholder}"
-                   th:field="*{username}"
-                   th:errorclass="is-invalid">
-            <small>@kmail.com</small>
-            <span class="bg-danger" th:text="#{invalidEmailInput}"></span>
+            <div class="my-2">
+                    <input
+                            class="p-1 rounded col-10"
+                            id="username"
+                            th:placeholder="#{emailPlaceholder}"
+                            th:field="*{username}"
+                            th:errorclass="is-invalid">
+                    <small class="col-2">@kmail.com</small>
+            </div>
+            <p class="errors alert alert-danger" th:text="#{invalidEmailInput}"></p>
             <!--The username must not contain special characters like @-->
-            <span class="bg-danger" th:text="#{specialCharacters}"></span>
-            <span class="bg-danger" th:text="#{emailTaken}"></span>
+            <p class="errors alert alert-danger" th:text="#{specialCharacters}"></p>
+            <p class="errors alert alert-danger" th:text="#{emailTaken}"></p>
         </div>
 
         <!--PASSWORD-->
         <div class="form-group mb-2">
             <label for="password" th:text="#{password}"></label>
             <input type="password"
-                   class="form-control"
+                   class="my-2 form-control"
                    id="password"
                    th:field="*{password}"
                    th:errorclass="is-invalid"
                    th:placeholder="#{password}">
-            <span class="bg-danger" th:text="#{invalidPassword}"></span>
+            <p class="errors alert alert-danger" th:text="#{invalidPassword}"></p>
         </div>
 
         <!--CONFIRM PASSWORD-->
         <div class="form-group mb-2">
             <label for="password" th:text="#{confirmPassword}"></label>
             <input type="password"
-                   class="form-control is-invalid"
+                   class="my-2 form-control is-invalid"
                    id="confirmPassword"
                    th:field="*{confirmPassword}"
                    th:errorclass="is-invalid"
                    th:placeholder="#{retype}">
-            <span class="bg-danger" th:text="#{invalidConfirmPassword}"></span>
+            <p class="errors alert alert-danger" th:text="#{invalidConfirmPassword}"></p>
         </div>
 
         <!--FIRST NAME-->
         <div class="form-group mb-2">
             <label for="firstName" th:text="#{firstName}"></label>
             <input
-                   id="firstName"
-                   class="form-control "
-                   th:field="*{firstName}"
-                   th:errorclass="is-invalid"
-                   th:placeholder="#{yourFirstName}">
-            <span class="bg-danger" th:text="#{invalidName}"></span>
+                    id="firstName"
+                    class="my-2 form-control "
+                    th:field="*{firstName}"
+                    th:errorclass="is-invalid"
+                    th:placeholder="#{yourFirstName}">
+            <p class="errors alert alert-danger" th:text="#{invalidName}"></p>
         </div>
 
         <!--LAST NAME-->
         <div class="form-group mb-2">
             <label for="lastName" th:text="#{lastname}"></label>
             <input
-                   id="lastName"
-                   class="form-control "
-                   th:field="*{lastName}"
-                   th:errorclass="is-invalid"
-                   th:placeholder="#{yourLastName}">
-            <span class="bg-danger" th:text="#{invalidName}"></span>
+                    id="lastName"
+                    class="my-2 form-control "
+                    th:field="*{lastName}"
+                    th:errorclass="is-invalid"
+                    th:placeholder="#{yourLastName}">
+            <p class="errors alert alert-danger" th:text="#{invalidName}"></p>
         </div>
 
         <button type="submit" class="btn btn-primary" th:text="#{register}"></button>
