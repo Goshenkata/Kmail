@@ -18,19 +18,19 @@
         <!--EMAIL-->
         <div class="form-group mb-2">
             <label for="username" th:text="#{emailInput}"></label>
-            <div class="my-2">
-                    <input
-                            class="p-1 rounded col-10"
-                            id="username"
-                            th:placeholder="#{emailPlaceholder}"
-                            th:field="*{username}"
-                            th:errorclass="is-invalid">
-                    <small class="col-2">@kmail.com</small>
+            <div class="my-2 ">
+                <input
+                        class="p-1 rounded col-10 "
+                        id="username"
+                        th:placeholder="#{emailPlaceholder}"
+                        th:field="*{username}"
+                        th:errorclass="is-invalid">
+                <small class="col-2">@kmail.com</small>
+                <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidEmailInput}"></p>
+                <!--The username must not contain special characters like @-->
+                <p class="errors alert alert-danger" th:text="#{specialCharacters}" th:if="${containsSpecialChars}"></p>
+                <p class="errors alert alert-danger" th:text="#{emailTaken}" th:if="${usernameTaken}"></p>
             </div>
-            <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidEmailInput}"></p>
-            <!--The username must not contain special characters like @-->
-            <p class="errors alert alert-danger" th:text="#{specialCharacters}" th:if="${containsSpecialChars}"></p>
-            <p class="errors alert alert-danger" th:text="#{emailTaken}" th:if="${usernameTaken}"></p>
         </div>
 
         <!--PASSWORD-->

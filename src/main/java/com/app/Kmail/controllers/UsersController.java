@@ -44,13 +44,13 @@ public class UsersController {
         boolean isUserNameTaken = userService.isUsernameTaken(userRegistrationBindingModel.getUsername());
         boolean passwordsDoNotMatch = !userRegistrationBindingModel.getPassword().equals(userRegistrationBindingModel.getConfirmPassword());
         if (!isUsernameValid || bindingResult.hasErrors() || isUserNameTaken) {
+            redirectAttributes.addFlashAttribute("userRegistrationBindingModel", userRegistrationBindingModel);
             redirectAttributes.addFlashAttribute("containsSpecialChars", !isUsernameValid);
             redirectAttributes.addFlashAttribute("usernameTaken", isUserNameTaken);
             redirectAttributes.addFlashAttribute("passwordsRepeated", passwordsDoNotMatch);
             if (bindingResult.hasErrors()) {
                 redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userRegistrationBindingModel", bindingResult);
             }
-            redirectAttributes.addFlashAttribute("userRegistrationBindingModel", userRegistrationBindingModel);
             return "redirect:/users/register";
         }
         return "redirect:/";
