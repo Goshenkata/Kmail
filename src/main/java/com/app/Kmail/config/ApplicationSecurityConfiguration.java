@@ -32,8 +32,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .authorizeRequests()
                 //allows access to all static resources
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                //allow everyone to access the index page
-                .antMatchers("/").permitAll()
+                //allow everyone to access the index, registration and login page
+                .antMatchers("/", "/users/register", "/users/login").permitAll()
                 //everything else is available to authenticated users
                 .antMatchers("/**").authenticated()
                 //configure the login page
