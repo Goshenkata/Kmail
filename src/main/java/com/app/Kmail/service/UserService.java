@@ -15,4 +15,6 @@ public interface UserService {
     boolean isUsernameTaken(String username);
 
     UserEntity registerAndLoginUser(UserRegistrationServiceModel userRegistrationServiceModel);
+
+    void initUsers();
 }

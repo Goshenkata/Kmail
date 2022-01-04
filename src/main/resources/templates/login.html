@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/commons::head">
+</head>
+<body class="bg-dark">
+<nav th:replace="fragments/commons::nav">
+</nav>
+
+<main class="container-fluid d-flex justify-content-center">
+    <form class="text-light col-6 container-fluid"
+          th:action="@{/users/login}"
+          th:method="post"
+    >
+        <h1 class="text-center fw-bold" th:text="#{login}"></h1>
+        <!--EMAIL-->
+        <div class="form-group mb-2">
+            <label for="username" th:text="#{emailInput}"></label>
+            <div class="my-2 ">
+                <input
+                        class="p-1 rounded col-10 "
+                        id="username"
+                        name="username"
+                        th:placeholder="#{emailPlaceholder}"
+                        th:value="${username}">
+                <small class="col-2">@kmail.com</small>
+            </div>
+        </div>
+
+        <!--PASSWORD-->
+        <div class="form-group mb-2">
+            <label for="password" th:text="#{password}"></label>
+            <input type="password"
+                   class="my-2 form-control"
+                   id="password"
+                   name="password"
+                   th:placeholder="#{password}">
+        </div>
+
+        <p class=" errors alert alert-danger" th:if="${isLoginInvalid}" th:text="#{invalidLogin}"></p>
+
+        <button type="submit" class="btn btn-primary" th:text="#{login}"></button>
+    </form>
+</main>
+
+<footer th:replace="fragments/commons::footer">
+</footer>
+
+<th:block th:replace="fragments/commons::scripts">
+</th:block>
+
+</body>
+</html>

@@ -3,6 +3,7 @@ package com.app.Kmail.controllers;
 import com.app.Kmail.model.binding.UserRegistrationBindingModel;
 import com.app.Kmail.model.service.UserRegistrationServiceModel;
 import com.app.Kmail.service.UserService;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,8 @@ public class UsersController {
     public UsersController(UserService userService) {
         this.userService = userService;
     }
+
+    //REGISTRATION
 
     @GetMapping("/register")
     public String register() {
@@ -70,6 +73,21 @@ public class UsersController {
                 .setFirstName(bindingModel.getFirstName())
                 .setLastName(bindingModel.getLastName());
         return serviceModel;
+    }
+
+    //LOGIN
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @PostMapping("/users/login-error")
+    public void loginError(@ModelAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
+                           String username,
+                           RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("isLoginInvalid", true);
+        redirectAttributes.addFlashAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY, username);
+
     }
 
 }

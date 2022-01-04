@@ -4,6 +4,8 @@ import com.app.Kmail.model.entity.UserEntity;
 import com.app.Kmail.model.service.UserRegistrationServiceModel;
 import com.app.Kmail.repository.UserRepository;
 import com.app.Kmail.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +22,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final KmailUserServiceImpl kmailUserService;
+    private Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, KmailUserServiceImpl kmailUserService) {
         this.userRepository = userRepository;
@@ -52,7 +55,37 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, userEntity.getPassword(), principal.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        LOGGER.info("{} registered and logged in", userEntity.getUsername());
         return userEntity;
+    }
+
+    @Override
+    public void initUsers() {
+        //username: user
+        //password: user
+        UserEntity user = new UserEntity();
+        user.setUsername("user");
+        user.setFirstName("user");
+        user.setLastName("userov");
+        user.setPassword(passwordEncoder.encode("user"));
+        userRepository.save(user);
+        //username: debian
+        //password: debian
+        UserEntity debian = new UserEntity();
+        debian.setUsername("debian");
+        debian.setFirstName("Debra");
+        debian.setLastName("Ian");
+        debian.setPassword(passwordEncoder.encode("debian"));
+        userRepository.save(debian);
+        //username: manjaro
+        //password: manjaro
+        UserEntity manjaro= new UserEntity();
+        manjaro.setUsername("manjaro");
+        manjaro.setFirstName("manjaro");
+        manjaro.setLastName("manjarov");
+        manjaro.setPassword(passwordEncoder.encode("manjaro"));
+        userRepository.save(manjaro);
+
+        LOGGER.info("users initialized: {}, {} and {}", user.getUsername(), debian.getUsername(), manjaro.getUsername());
     }
 }
