@@ -42,8 +42,6 @@ public class UsersController {
         3) The username is not unique
         4) The passwords do not match
         */
-        /// TODO: 3.01.22 г. fix invalid email input not showing
-        //  TODO is password valid check "Your password must be at between 8 and 32 characters long, must contain at least one capital letter and a number"
         boolean isUsernameValid = userService.isUsernameValid(userRegistrationBindingModel.getUsername());
         boolean isUserNameTaken = userService.isUsernameTaken(userRegistrationBindingModel.getUsername());
         boolean passwordsDoNotMatch = !userRegistrationBindingModel.getPassword().equals(userRegistrationBindingModel.getConfirmPassword());
@@ -81,13 +79,13 @@ public class UsersController {
         return "login";
     }
 
-    @PostMapping("/users/login-error")
-    public void loginError(@ModelAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
+    @PostMapping("/login-error")
+    public String loginError(@ModelAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
                            String username,
                            RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("isLoginInvalid", true);
         redirectAttributes.addFlashAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY, username);
-
+        return "redirect:/users/login";
     }
 
 }

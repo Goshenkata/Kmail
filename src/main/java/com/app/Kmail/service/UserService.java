@@ -2,10 +2,6 @@ package com.app.Kmail.service;
 
 import com.app.Kmail.model.entity.UserEntity;
 import com.app.Kmail.model.service.UserRegistrationServiceModel;
-import org.springframework.stereotype.Service;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public interface UserService {
 
