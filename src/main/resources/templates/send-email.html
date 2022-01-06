@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/commons::head">
+</head>
+<body class="bg-dark">
+
+<nav th:replace="fragments/commons::nav">
+</nav>
+
+<main class="container-fluid d-flex justify-content-center">
+    <form class="text-light col-6 container-fluid"
+          th:action="@{/emails/send}"
+          th:method="post"
+          th:object="${emailSendBindingModel}"
+          enctype="multipart/form-data"
+    >
+        <h1 class="text-center fw-bold" th:text="#{sendEmail}"></h1>
+        <!--FROM-->
+        <div class="form-group mb-2">
+            <label for="from" th:text="#{from}">
+            </label>
+            <input
+                    th:errorclass="is-invalid"
+                    id="from"
+                    th:field="*{from}"
+                    type="text"
+                    disabled
+                    required
+                    class="form-control disabled">
+            <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidFieldError}"></p>
+            <p class="invalid-feedback errors alert alert-danger" th:if="${errorFrom}" th:text="#{errorFrom}"></p>
+
+        </div>
+
+        <!--TO-->
+        <div class="form-group mb-2">
+            <label for="to" th:text="#{to}">
+            </label>
+            <input
+                    th:errorclass="is-invalid"
+                    required
+                    id="to"
+                    th:field="*{to}"
+                    type="text"
+                    class="form-control disabled">
+            <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidFieldError}"></p>
+            <p class="invalid-feedback errors alert alert-danger" th:if=${errorTo} th:text="#{errorTo}"></p>
+            <!--TITLE-->
+            <div class="form-group mb-2">
+                <label for="title" th:text="#{title}">
+                </label>
+                <input
+                        th:errorclass="is-invalid"
+                        required
+                        id="title"
+                        th:field="*{title}"
+                        type="text"
+                        class="form-control">
+                <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidFieldError}"></p>
+            </div>
+
+
+            <!--CONTENT-->
+            <div class="form-group mb-2">
+                <label for="content" th:text="#{content}">
+                </label>
+                <textarea
+                        required
+                        id="content"
+                        th:field="*{content}"
+                        class="form-control">
+            </textarea>
+                <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidFieldError}"></p>
+            </div>
+
+            <!--ATTACHMENT-->
+            <div class="form-group mb-2">
+                <label for="attachment" th:text="#{attachment}">
+                </label>
+                <input
+                        id="attachment"
+                        th:field="*{attachment}"
+                        type="file"
+                        class="form-control-file"
+                >
+            </div>
+
+            <button type="submit" class="btn btn-primary" th:text="#{sended}"></button>
+    </form>
+</main>
+
+<footer th:replace="fragments/commons::footer">
+</footer>
+
+<th:block th:replace="fragments/commons::scripts">
+</th:block>
+</body>
+</html>

@@ -13,4 +13,7 @@ public interface UserService {
     UserEntity registerAndLoginUser(UserRegistrationServiceModel userRegistrationServiceModel);
 
     void initUsers();
+
+    String removeEmailAddress(String email);
+
 }

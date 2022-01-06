@@ -20,6 +20,7 @@
             <label for="username" th:text="#{emailInput}"></label>
             <div class="my-2 ">
                 <input
+                        required
                         class="p-1 rounded col-10 "
                         id="username"
                         th:placeholder="#{emailPlaceholder}"
@@ -37,6 +38,7 @@
         <div class="form-group mb-2">
             <label for="password" th:text="#{password}"></label>
             <input type="password"
+                   required
                    class="my-2 form-control"
                    id="password"
                    th:field="*{password}"
@@ -49,6 +51,7 @@
         <div class="form-group mb-2">
             <label for="password" th:text="#{confirmPassword}"></label>
             <input type="password"
+                   required
                    class="my-2 form-control "
                    id="confirmPassword"
                    th:field="*{confirmPassword}"
@@ -61,6 +64,7 @@
         <div class="form-group mb-2">
             <label for="firstName" th:text="#{firstName}"></label>
             <input
+                    required
                     id="firstName"
                     class="my-2 form-control "
                     th:field="*{firstName}"
@@ -73,6 +77,7 @@
         <div class="form-group mb-2">
             <label for="lastName" th:text="#{lastname}"></label>
             <input
+                    required
                     id="lastName"
                     class="my-2 form-control "
                     th:field="*{lastName}"

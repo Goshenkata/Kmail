@@ -88,4 +88,13 @@ public class UserServiceImpl implements UserService {
 
         LOGGER.info("users initialized: {}, {} and {}", user.getUsername(), debian.getUsername(), manjaro.getUsername());
     }
+
+    @Override
+    public String removeEmailAddress(String email) {
+        if (!email.endsWith("@kmail.com")) {
+            throw new IllegalArgumentException("The email does not end with @kmail.com and thus the address can't be removed");
+        }
+        return email.substring(0, email.length()-10);
+    }
+
 }

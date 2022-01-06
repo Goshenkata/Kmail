@@ -35,7 +35,7 @@
                 </th:block>
                 <th:block sec:authorize="isAuthenticated()">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" th:text="#{sendEmail}"></a>
+                        <a class="nav-link" th:href="@{/emails/send}" th:text="#{sendEmail}"></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" th:text="#{inbox}"></a>
