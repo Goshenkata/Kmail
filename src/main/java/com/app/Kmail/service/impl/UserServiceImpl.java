@@ -64,30 +64,32 @@ public class UserServiceImpl implements UserService {
     public void initUsers() {
         //username: user
         //password: user
-        UserEntity user = new UserEntity();
-        user.setUsername("user");
-        user.setFirstName("user");
-        user.setLastName("userov");
-        user.setPassword(passwordEncoder.encode("user"));
-        userRepository.save(user);
-        //username: debian
-        //password: debian
-        UserEntity debian = new UserEntity();
-        debian.setUsername("debian");
-        debian.setFirstName("Debra");
-        debian.setLastName("Ian");
-        debian.setPassword(passwordEncoder.encode("debian"));
-        userRepository.save(debian);
-        //username: manjaro
-        //password: manjaro
-        UserEntity manjaro= new UserEntity();
-        manjaro.setUsername("manjaro");
-        manjaro.setFirstName("manjaro");
-        manjaro.setLastName("manjarov");
-        manjaro.setPassword(passwordEncoder.encode("manjaro"));
-        userRepository.save(manjaro);
+        if (userRepository.findAll().size() <= 3) {
+            UserEntity user = new UserEntity();
+            user.setUsername("user");
+            user.setFirstName("user");
+            user.setLastName("userov");
+            user.setPassword(passwordEncoder.encode("user"));
+            userRepository.save(user);
+            //username: debian
+            //password: debian
+            UserEntity debian = new UserEntity();
+            debian.setUsername("debian");
+            debian.setFirstName("Debra");
+            debian.setLastName("Ian");
+            debian.setPassword(passwordEncoder.encode("debian"));
+            userRepository.save(debian);
+            //username: manjaro
+            //password: manjaro
+            UserEntity manjaro = new UserEntity();
+            manjaro.setUsername("manjaro");
+            manjaro.setFirstName("manjaro");
+            manjaro.setLastName("manjarov");
+            manjaro.setPassword(passwordEncoder.encode("manjaro"));
+            userRepository.save(manjaro);
 
-        LOGGER.info("users initialized: {}, {} and {}", user.getUsername(), debian.getUsername(), manjaro.getUsername());
+            LOGGER.info("users initialized: {}, {} and {}", user.getUsername(), debian.getUsername(), manjaro.getUsername());
+        }
     }
 
     @Override

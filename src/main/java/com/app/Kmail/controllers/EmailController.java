@@ -1,12 +1,15 @@
 package com.app.Kmail.controllers;
 
 import com.app.Kmail.model.binding.EmailSendBindingModel;
+import com.app.Kmail.model.entity.EmailEntity;
 import com.app.Kmail.model.service.EmailServiceModel;
+import com.app.Kmail.model.view.EmailViewModel;
 import com.app.Kmail.service.EmailService;
 import com.app.Kmail.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +22,8 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/emails")
@@ -103,5 +108,17 @@ public class EmailController {
     @ModelAttribute("emailSendBindingModel")
     public EmailSendBindingModel emailSendBindingModel(Principal principal) {
         return new EmailSendBindingModel().setFrom(principal.getName() + "@kmail.com");
+    }
+
+    @GetMapping("/inbox")
+    public String inbox(Principal principal, Model model) {
+        List<EmailViewModel> emails = emailService
+                .getAllEmailsForUser(principal.getName());
+        if (emails.size()==0) {
+            model.addAttribute("isEmpty", true);
+        } else {
+            model.addAttribute("emails", emails);
+        }
+        return "inbox";
     }
 }

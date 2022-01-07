@@ -91,6 +91,5 @@ class EmailControllerTest {
     @AfterEach
     void tearDown() {
         emailRepository.deleteAll();
-        userService.deleteAll();
-    }
+        userService.deleteAll();}
 }
