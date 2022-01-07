@@ -11,7 +11,7 @@ public class EmailServiceModel {
     private String to;
     private String title;
     private String content;
-    private File attachment;
+    private byte[] attachment;
     private boolean isRead;
     private LocalDateTime created;
 
@@ -70,11 +70,11 @@ public class EmailServiceModel {
         return this;
     }
 
-    public File getAttachment() {
+    public byte[] getAttachment() {
         return attachment;
     }
 
-    public EmailServiceModel setAttachment(File attachment) {
+    public EmailServiceModel setAttachment(byte []attachment) {
         this.attachment = attachment;
         return this;
     }

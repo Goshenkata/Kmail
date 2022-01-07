@@ -54,7 +54,7 @@ class UsersControllerTest {
                         .param("lastName", LAST_NAME)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
-        Assertions.assertEquals(1, userRepository.count(), "after creating a single user the count is one");
+        Assertions.assertEquals(4, userRepository.count(), "after creating a single user the count is one");
         Optional<UserEntity> userOpt = userRepository.findByUsername(USERNAME);
         Assertions.assertTrue(userOpt.isPresent(), "the new user is present in the database");
         UserEntity user = userOpt.get();
@@ -95,8 +95,4 @@ class UsersControllerTest {
         userRepository.deleteAll();
     }
 
-    @BeforeEach
-    void setUp() {
-        userRepository.deleteAll();
-    }
 }

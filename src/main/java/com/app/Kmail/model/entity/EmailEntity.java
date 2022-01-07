@@ -7,6 +7,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Objects;
 
 @Entity
 @Table(name = "emails")
@@ -21,7 +23,7 @@ public class EmailEntity extends BaseEntity {
     @Column(nullable = false)
     private String content;
     @Lob
-    private File attachment;
+    private byte[] attachment;
     @Column(nullable = false)
     private boolean isRead;
     @Column(name = "created", nullable = false)
@@ -82,11 +84,26 @@ public class EmailEntity extends BaseEntity {
         return this;
     }
 
-    public File getAttachment() {
+    public byte[] getAttachment() {
         return attachment;
     }
 
-    public EmailEntity setAttachment(File attachment) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EmailEntity)) return false;
+        EmailEntity email = (EmailEntity) o;
+        return isRead == email.isRead && from.equals(email.from) && to.equals(email.to) && title.equals(email.title) && content.equals(email.content) && Arrays.equals(attachment, email.attachment) && created.equals(email.created);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(from, to, title, content, isRead, created);
+        result = 31 * result + Arrays.hashCode(attachment);
+        return result;
+    }
+
+    public EmailEntity setAttachment(byte[] attachment) {
         this.attachment = attachment;
         return this;
     }

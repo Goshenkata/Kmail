@@ -5,14 +5,10 @@ import com.app.Kmail.service.impl.KmailUserServiceImpl;
 import com.app.Kmail.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -42,8 +38,8 @@ class UserServiceTest {
 
     @Test
     void removeEmailAddress() {
-        Assertions.assertEquals("username",userService.removeEmailAddress("username@kmail.com"));
-        Assertions.assertThrows(IllegalArgumentException.class,() -> userService.removeEmailAddress("username"));
+        Assertions.assertEquals("username",userService.removeAddress("username@kmail.com"));
+        Assertions.assertThrows(IllegalArgumentException.class,() -> userService.removeAddress("username"));
     }
 
 }

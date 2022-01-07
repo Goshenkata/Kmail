@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -90,11 +91,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String removeEmailAddress(String email) {
+    public String removeAddress(String email) {
         if (!email.endsWith("@kmail.com")) {
             throw new IllegalArgumentException("The email does not end with @kmail.com and thus the address can't be removed");
         }
         return email.substring(0, email.length()-10);
+    }
+
+    @Override
+    public Optional<UserEntity> findByUsernameWithAddress(String usernameWithAdress) {
+        String username = removeAddress(usernameWithAdress);
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public void deleteAll() {
+        userRepository.deleteAll();
     }
 
 }

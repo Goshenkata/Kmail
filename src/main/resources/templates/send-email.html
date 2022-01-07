@@ -28,9 +28,9 @@
                     type="text"
                     disabled
                     required
-                    class="form-control disabled">
+                    class="form-control disabled mb-1">
             <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidFieldError}"></p>
-            <p class="invalid-feedback errors alert alert-danger" th:if="${errorFrom}" th:text="#{errorFrom}"></p>
+            <p class="errors alert alert-danger" th:if="${errorFrom}" th:text="#{errorFrom}"></p>
 
         </div>
 
@@ -44,50 +44,51 @@
                     id="to"
                     th:field="*{to}"
                     type="text"
-                    class="form-control disabled">
+                    class="form-control mb-1">
             <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidFieldError}"></p>
-            <p class="invalid-feedback errors alert alert-danger" th:if=${errorTo} th:text="#{errorTo}"></p>
-            <!--TITLE-->
-            <div class="form-group mb-2">
-                <label for="title" th:text="#{title}">
-                </label>
-                <input
-                        th:errorclass="is-invalid"
-                        required
-                        id="title"
-                        th:field="*{title}"
-                        type="text"
-                        class="form-control">
-                <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidFieldError}"></p>
-            </div>
+            <p class="errors alert alert-danger"  th:if="${errorTo}" th:text="#{errorTo}"></p>
+        </div>
+        <!--TITLE-->
+        <div class="form-group mb-2">
+            <label for="title" th:text="#{title}">
+            </label>
+            <input
+                    th:errorclass="is-invalid"
+                    required
+                    id="title"
+                    th:field="*{title}"
+                    type="text"
+                    class="mb-1 form-control">
+            <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidFieldError}"></p>
+        </div>
 
 
-            <!--CONTENT-->
-            <div class="form-group mb-2">
-                <label for="content" th:text="#{content}">
-                </label>
-                <textarea
-                        required
-                        id="content"
-                        th:field="*{content}"
-                        class="form-control">
+        <!--CONTENT-->
+        <div class="form-group mb-2">
+            <label for="content" th:text="#{content}">
+            </label>
+            <textarea
+                    required
+                    id="content"
+                    th:field="*{content}"
+                    class="form-control mb-1">
             </textarea>
-                <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidFieldError}"></p>
-            </div>
+            <p class="invalid-feedback errors alert alert-danger" th:text="#{invalidFieldError}"></p>
+        </div>
 
-            <!--ATTACHMENT-->
-            <div class="form-group mb-2">
-                <label for="attachment" th:text="#{attachment}">
-                </label>
-                <input
-                        id="attachment"
-                        th:field="*{attachment}"
-                        type="file"
-                        class="form-control-file"
-                >
-            </div>
+        <!--ATTACHMENT-->
+        <div class="form-group mb-2">
+            <label for="attachment" th:text="#{attachment}">
+            </label>
+            <input
+                    id="attachment"
+                    th:field="*{attachment}"
+                    type="file"
+                    class="form-control-file mb-1"
+            >
+        </div>
 
-            <button type="submit" class="btn btn-primary" th:text="#{sended}"></button>
+        <button type="submit" class="btn btn-primary" th:text="#{sended}"></button>
     </form>
 </main>
 
