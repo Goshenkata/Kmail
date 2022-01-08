@@ -1,29 +1,29 @@
 package com.app.Kmail.controllers;
 
 import com.app.Kmail.model.binding.EmailSendBindingModel;
-import com.app.Kmail.model.entity.EmailEntity;
 import com.app.Kmail.model.service.EmailServiceModel;
 import com.app.Kmail.model.view.EmailViewModel;
+import com.app.Kmail.model.view.InboxViewModel;
 import com.app.Kmail.service.EmailService;
 import com.app.Kmail.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/emails")
@@ -88,6 +88,8 @@ public class EmailController {
                 .setFrom(userService.removeAddress(emailSendBindingModel.getFrom()))
                 .setAttachment(multipartToByteArray(emailSendBindingModel
                         .getAttachment()))
+                .setAttachmentName(
+                        emailSendBindingModel.getAttachment().getOriginalFilename())
                 .setContent(emailSendBindingModel.getContent())
                 .setTitle(emailSendBindingModel.getTitle())
                 .setCreated(LocalDateTime.now())
@@ -112,13 +114,42 @@ public class EmailController {
 
     @GetMapping("/inbox")
     public String inbox(Principal principal, Model model) {
-        List<EmailViewModel> emails = emailService
+        List<InboxViewModel> emails = emailService
                 .getAllEmailsForUser(principal.getName());
-        if (emails.size()==0) {
+        if (emails.isEmpty()) {
             model.addAttribute("isEmpty", true);
         } else {
             model.addAttribute("emails", emails);
         }
         return "inbox";
+    }
+
+    @GetMapping("/sent")
+    public String sent(Principal principal, Model model) {
+        List<InboxViewModel> emails = emailService
+                .getAllEmailsFromUser(principal.getName());
+        if (emails.isEmpty()) {
+            model.addAttribute("isEmpty", true);
+        } else {
+            model.addAttribute("emails", emails);
+        }
+        return "inbox";
+    }
+
+    @GetMapping("/{id}")
+    public String viewEmail(@PathVariable("id") Long id,
+                            Model model) {
+        //todo send email should be two values (duh)
+        //todo error handling, authorisation for emails, also when file sized are too big
+        emailService.emailSeen(id);
+        EmailViewModel emailViewModel = emailService.getEmailViewModel(id);
+        model.addAttribute("email", emailViewModel);
+        return "email";
+    }
+
+    @GetMapping("/{id}/download")
+    @ResponseBody
+    public FileSystemResource downloadAttachment(@PathVariable Long id) throws IOException {
+        return emailService.downloadAttachment(id);
     }
 }

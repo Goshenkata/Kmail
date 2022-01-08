@@ -10,5 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface EmailRepository extends JpaRepository<EmailEntity, Long> {
+
     Optional<List<EmailEntity>> getAllByTo(UserEntity user);
+
+    Optional<List<EmailEntity>> getAllByFrom(UserEntity user);
 }

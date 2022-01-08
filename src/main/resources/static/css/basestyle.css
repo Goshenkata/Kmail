@@ -18,3 +18,7 @@
 .footer-icon:hover {
     color: darkcyan;
 }
+
+#tableRow:hover {
+    cursor: pointer;
+}

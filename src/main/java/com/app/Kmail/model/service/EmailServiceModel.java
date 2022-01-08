@@ -14,6 +14,16 @@ public class EmailServiceModel {
     private byte[] attachment;
     private boolean isRead;
     private LocalDateTime created;
+    String attachmentName;
+
+    public String getAttachmentName() {
+        return attachmentName;
+    }
+
+    public EmailServiceModel setAttachmentName(String attachmentName) {
+        this.attachmentName = attachmentName;
+        return this;
+    }
 
     public boolean isRead() {
         return isRead;

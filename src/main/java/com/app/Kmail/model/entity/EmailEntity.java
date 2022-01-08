@@ -28,6 +28,17 @@ public class EmailEntity extends BaseEntity {
     private boolean isRead;
     @Column(name = "created", nullable = false)
     private LocalDateTime created;
+    @Column
+    private String attachmentName;
+
+    public String getAttachmentName() {
+        return attachmentName;
+    }
+
+    public EmailEntity setAttachmentName(String attachmentName) {
+        this.attachmentName = attachmentName;
+        return this;
+    }
 
     public boolean isRead() {
         return isRead;

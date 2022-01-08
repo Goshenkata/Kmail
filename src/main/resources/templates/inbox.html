@@ -8,13 +8,20 @@
 <nav th:replace="fragments/commons::nav">
 </nav>
 
-<main >
+<main>
     <table th:unless="${isEmpty} " class="table table-dark table-hover">
         <tbody>
-        <tr  th:each="email: ${emails}" th:object="${email}" th:classappend="*{isRead}? fw-bold : text-secondary" >
+        <tr th:each="email: ${emails}"
+            th:object="${email}"
+            th:classappend="*{isRead}? fw-bold : text-secondary"
+            th:attr="onclick=|openEmail(*{id})|"
+            id="tableRow"
+        >
+
             <td th:text="*{from}"></td>
             <td colspan="2" th:text="*{title}"></td>
             <td th:text="*{date}">Otto</td>
+
         </tr>
         </tbody>
     </table>
@@ -26,6 +33,7 @@
 
 <th:block th:replace="fragments/commons::scripts">
 </th:block>
+<script th:src="@{/js/inbox.js}"></script>
 
 </body>
 </html>

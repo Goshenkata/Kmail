@@ -22,7 +22,7 @@ public class DBinit implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         userService.initUsers();
-        emailService.initUsers();
+        emailService.initEmail();
         LOGGER.info("Database initialized");
     }
 }
