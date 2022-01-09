@@ -9,6 +9,7 @@ import com.app.Kmail.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -136,13 +137,15 @@ public class EmailController {
         return "inbox";
     }
 
+    @PreAuthorize("@emailServiceImpl.canViewEmail(#id, #principal.name)")
     @GetMapping("/{id}")
     public String viewEmail(@PathVariable("id") Long id,
+                            Principal principal,
                             Model model) {
         //todo send email should be two values (duh)
         //todo error handling, authorisation for emails, also when file sized are too big
         emailService.emailSeen(id);
-        EmailViewModel emailViewModel = emailService.getEmailViewModel(id);
+        EmailViewModel emailViewModel = emailService.getEmailViewModel(id, principal);
         model.addAttribute("email", emailViewModel);
         return "email";
     }

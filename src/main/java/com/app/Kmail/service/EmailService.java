@@ -6,6 +6,7 @@ import com.app.Kmail.model.view.EmailViewModel;
 import com.app.Kmail.model.view.InboxViewModel;
 import org.springframework.core.io.FileSystemResource;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface EmailService {
@@ -19,10 +20,12 @@ public interface EmailService {
 
     List<InboxViewModel> getAllEmailsFromUser(String name);
 
-    EmailViewModel getEmailViewModel(Long id);
+    EmailViewModel getEmailViewModel(Long id, Principal principal);
 
     EmailEntity emailSeen(Long id);
 
     //this will turn the bytes in the db to a file available for download
     FileSystemResource downloadAttachment(Long id);
+
+    boolean canViewEmail(Long id, String username);
 }

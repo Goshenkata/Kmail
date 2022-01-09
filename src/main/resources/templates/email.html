@@ -9,16 +9,18 @@
 </nav>
 
 <main class="text-light p-5" th:object="${email}">
-    <small th:text="|From: *{from}@kmail.com|"></small><br>
-    <small th:text="|To: *{to}@kmail.com|"></small>
+    <small th:text="|#{from}: *{from}@kmail.com|"></small><br>
+    <small th:text="|#{to}: *{to}@kmail.com|"></small>
     <h1 class="text-center" th:text="*{title}"></h1>
     <p th:text="*{content}"></p>
     <a th:if="*{isHasAttachment}"
        th:download="*{attachmentName}"
-       th:href="*{downloadFileLink}"
-    >
-        Download attribute
+       th:href="*{downloadFileLink}">
+        <button class="btn btn-primary btn-lg"
+                th:text="|#{download} *{attachmentName}|">
+        </button>
     </a>
+    <br>
     <small th:text="*{date}"></small>
 </main>
 

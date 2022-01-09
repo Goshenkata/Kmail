@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public List<InboxViewModel> getAllEmailsForUser(String name) {
         Optional<List<EmailEntity>> email= emailRepository
-                .getAllByTo(userRepository.findByUsername(name)
+                .findAllByTo(userRepository.findByUsername(name)
                         .orElseThrow(() -> new UsernameNotFoundException("username " + name + " not found")));
         if (email.isEmpty()) return new ArrayList<>();
         return email.get().stream()
@@ -155,7 +156,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public List<InboxViewModel> getAllEmailsFromUser(String name) {
-        Optional<List<EmailEntity>> emails = emailRepository.getAllByFrom(userRepository.findByUsername(name)
+        Optional<List<EmailEntity>> emails = emailRepository.findAllByFrom(userRepository.findByUsername(name)
                 .orElseThrow(() -> new UsernameNotFoundException("username " + name + " not found.")));
         if (emails.isEmpty()) {
             return new ArrayList<>();
@@ -167,7 +168,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public EmailViewModel getEmailViewModel(Long id) {
+    public EmailViewModel getEmailViewModel(Long id, Principal principal) {
         return toEmailViewModel(emailRepository.findById(id)
                 .orElseThrow(() -> new EmailNotFoundException("email with id " + id + " not found")));
     }
@@ -238,5 +239,15 @@ public class EmailServiceImpl implements EmailService {
                 .setTitle(r.getTitle())
                 .setId(r.getId());
         return email;
+    }
+
+    @Override
+    public boolean canViewEmail(Long id, String username) {
+        Optional<EmailEntity> email = emailRepository.findById(id);
+        if (email.isEmpty()) {
+            return false;
+        }
+        return email.get().getTo().getUsername().equals(username)
+        || email.get().getFrom().getUsername().equals(username);
     }
 }
