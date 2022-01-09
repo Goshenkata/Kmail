@@ -13,7 +13,7 @@
         <tbody>
         <tr th:each="email: ${emails}"
             th:object="${email}"
-            th:classappend="*{isRead}? fw-bold : text-secondary"
+            th:classappend="*{isRead} or ${isSent}? text-secondary : fw-bold"
             th:attr="onclick=|openEmail(*{id})|"
             id="tableRow"
         >

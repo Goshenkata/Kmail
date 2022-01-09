@@ -22,7 +22,7 @@ public interface EmailService {
 
     EmailViewModel getEmailViewModel(Long id, Principal principal);
 
-    EmailEntity emailSeen(Long id);
+    EmailEntity emailSeen(Long id, String name);
 
     //this will turn the bytes in the db to a file available for download
     FileSystemResource downloadAttachment(Long id);

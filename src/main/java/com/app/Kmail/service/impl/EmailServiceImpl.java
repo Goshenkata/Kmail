@@ -60,7 +60,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public List<InboxViewModel> getAllEmailsForUser(String name) {
-        Optional<List<EmailEntity>> email= emailRepository
+        Optional<List<EmailEntity>> email = emailRepository
                 .findAllByTo(userRepository.findByUsername(name)
                         .orElseThrow(() -> new UsernameNotFoundException("username " + name + " not found")));
         if (email.isEmpty()) return new ArrayList<>();
@@ -105,7 +105,7 @@ public class EmailServiceImpl implements EmailService {
 
 
             //DEBIAN SENDING
-            EmailEntity debianToUser= new EmailEntity();
+            EmailEntity debianToUser = new EmailEntity();
             debianToUser.setFrom(debian)
                     .setTo(user)
                     .setTitle("title from debian")
@@ -129,7 +129,7 @@ public class EmailServiceImpl implements EmailService {
 
 
             //MANJARO SENDING
-            EmailEntity manjaroToUser= new EmailEntity();
+            EmailEntity manjaroToUser = new EmailEntity();
             manjaroToUser.setFrom(manjaro)
                     .setTo(user)
                     .setTitle("title from manjaro")
@@ -140,7 +140,7 @@ public class EmailServiceImpl implements EmailService {
                     .setAttachmentName(null);
             emailRepository.save(manjaroToUser);
 
-            EmailEntity manjaroToDebian= new EmailEntity();
+            EmailEntity manjaroToDebian = new EmailEntity();
             manjaroToDebian.setFrom(manjaro)
                     .setTo(debian)
                     .setTitle("title from manjaro")
@@ -174,10 +174,12 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public EmailEntity emailSeen(Long id) {
+    public EmailEntity emailSeen(Long id, String name) {
         EmailEntity email = emailRepository.getById(id);
-        email.setRead(true);
-        emailRepository.save(email);
+        if (name.equals(email.getTo().getUsername())) {
+            email.setRead(true);
+            emailRepository.save(email);
+        }
         return email;
     }
 
@@ -248,6 +250,6 @@ public class EmailServiceImpl implements EmailService {
             return false;
         }
         return email.get().getTo().getUsername().equals(username)
-        || email.get().getFrom().getUsername().equals(username);
+                || email.get().getFrom().getUsername().equals(username);
     }
 }

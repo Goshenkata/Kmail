@@ -6,14 +6,17 @@ import com.app.Kmail.model.view.EmailViewModel;
 import com.app.Kmail.model.view.InboxViewModel;
 import com.app.Kmail.service.EmailService;
 import com.app.Kmail.service.UserService;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -79,6 +82,7 @@ public class EmailController {
 
             }
         }
+
         emailService.save(toServiceModel(emailSendBindingModel));
         return "redirect:/";
     }
@@ -121,6 +125,7 @@ public class EmailController {
             model.addAttribute("isEmpty", true);
         } else {
             model.addAttribute("emails", emails);
+            model.addAttribute("isSent", false);
         }
         return "inbox";
     }
@@ -133,26 +138,28 @@ public class EmailController {
             model.addAttribute("isEmpty", true);
         } else {
             model.addAttribute("emails", emails);
+            model.addAttribute("isSent", true);
         }
         return "inbox";
     }
 
     @PreAuthorize("@emailServiceImpl.canViewEmail(#id, #principal.name)")
-    @GetMapping("/{id}")
-    public String viewEmail(@PathVariable("id") Long id,
+    @GetMapping("/{id}") public String viewEmail(@PathVariable("id") Long id,
                             Principal principal,
                             Model model) {
-        //todo send email should be two values (duh)
-        //todo error handling, authorisation for emails, also when file sized are too big
-        emailService.emailSeen(id);
+        //todo error handling, also when file sized are too big
+        emailService.emailSeen(id, principal.getName());
         EmailViewModel emailViewModel = emailService.getEmailViewModel(id, principal);
         model.addAttribute("email", emailViewModel);
         return "email";
     }
 
+    @PreAuthorize("@emailServiceImpl.canViewEmail(#id, #principal.name)")
     @GetMapping("/{id}/download")
     @ResponseBody
-    public FileSystemResource downloadAttachment(@PathVariable Long id) throws IOException {
+    public FileSystemResource downloadAttachment(@PathVariable Long id,
+                                                 Principal principal) throws IOException {
         return emailService.downloadAttachment(id);
     }
+
 }

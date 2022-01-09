@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/commons::head">
+</head>
+<body class="bg-dark">
+<nav th:replace="fragments/commons::nav">
+</nav>
+
+<main class="container-fluid">
+    <h1 class="text-center text-light my-3" th:text="#{error}"></h1>
+    <img class="mx-auto d-block rounded" th:src="@{/images/errorDino.jpg}" src="" alt="error image">
+</main>
+
+<footer th:replace="fragments/commons::footer">
+</footer>
+
+<th:block th:replace="fragments/commons::scripts">
+</th:block>
+
+</body>
+</html>

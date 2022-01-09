@@ -84,11 +84,16 @@
                     id="attachment"
                     th:field="*{attachment}"
                     type="file"
-                    class="form-control-file mb-1"
-            >
+                    class="form-control-file mb-1">
+            <p class="errors alert alert-danger"
+               th:if="${fileTooBig}"
+               th:text="#{fileTooBig}"
+            ></p>
         </div>
 
-        <button type="submit" class="btn btn-primary" th:text="#{sended}"></button>
+        <button type="submit"
+                class="btn btn-primary"
+                th:text="#{sendEmail}"></button>
     </form>
 </main>
 
