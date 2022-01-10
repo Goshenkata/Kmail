@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/commons::head">
+</head>
+<body class="bg-dark">
+<nav th:replace="fragments/commons::nav">
+</nav>
+
+
+<main class="text-light p-5">
+    <h1 class="mb-2 text-center">About this project</h1>
+    <p class="mb-2">This project is made by Georgi Kolev, for both educational purposes and as my senior high school
+        project,
+        It emulates an email service, users can send messages and files (up to 25MB) to each other,
+        all data is persisted in a database. The application is secure, all passwords are hashed, user privileges have
+        been thoroughly tested to assure that no user can access data which it shouldn't be able to (like the emails of
+        other users, that would be... bad).
+        This project is internationalised, having support for both English and Bulgarian,
+        it automatically resolves the localization of the user when they visit for a first time, and remembers
+        preferences too!
+        The application also validates every user input on both the front and back end and gives appropriate feedback to
+        the user,
+        as well as other kinds of error-handling (no ugly whitelabel pages!).<br>
+        The source code can be found <a href="https://github.com/Goshenkata/Kmail/">here</a><br>
+    </p>
+    <h2 class="text-center mb-2">Tech stack</h2>
+    <div class="row">
+        <div class="col-12 col-md-6 mb-2">
+            <!--FRONTEND-->
+            <h3 class="text-center mb-4">Frontend</h3>
+
+            <!--Bootstrap-->
+            <div class="row mb-3">
+                <h4 class="text-center mb-3">Bootstrap</h4>
+                <img th:src="@{/images/Bootstrap.svg}"
+                     alt="Bootstrap logo"
+                     class="col-12 col-md-6 d-inline-block mx-auto">
+            </div>
+
+            <!--HTML + CSS + Javascript-->
+            <div class="row mb-3">
+                <h4 class="text-center mb-3">HTML+CSS+Javascript</h4>
+                <img th:src="@{/images/html_js_css.png}"
+                     alt="HTML CSS JS logo"
+                     class="col-12 col-md-6 d-inline-block mx-auto">
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 mb-2">
+            <!--BACKEND-->
+            <h3 class="text-center mb-4">Backend</h3>
+
+            <!--Spring Web-->
+            <div class="row mb-3">
+                <h4 class="text-center mb-3">Spring Web</h4>
+                <img th:src="@{/images/spring.png}"
+                     alt="Spring logo"
+                     class="col-12 col-md-6 d-inline-block mx-auto">
+            </div>
+
+            <!--Spring DATA-->
+            <div class="row mb-3">
+                <h4 class="text-center mb-3">Spring Data JPA</h4>
+                <img th:src="@{/images/spring-data.png}"
+                     alt="Spring Data logo"
+                     class="col-12 col-md-6 d-inline-block mx-auto">
+            </div>
+
+
+            <!--Spring Security-->
+            <div class="row mb-3">
+                <h4 class="text-center mb-3">Spring Security</h4>
+                <img th:src="@{/images/spring_security.png}"
+                     alt="Spring Security logo"
+                     class="col-12 col-md-6 d-inline-block mx-auto">
+            </div>
+
+
+            <!--MYSQL-->
+            <div class="row mb-3">
+                <h4 class="text-center mb-3">MySQL</h4>
+                <img th:src="@{/images/MySQL.png}"
+                     alt="MySQL logo"
+                     class="col-12 col-md-6 d-inline-block mx-auto">
+            </div>
+
+
+            <!--H2 Databse-->
+            <div class="row mb-3">
+                <h4 class="text-center mb-3">H2</h4>
+                <img th:src="@{/images/h2-logo-2.png}"
+                     alt="H2 logo"
+                     class="col-12 col-md-6 d-inline-block mx-auto">
+            </div>
+
+            <!--JUnit and Mockito-->
+            <div class="row mb-1">
+                <h4 class="text-center mb-3">JUnit5 + Mockito</h4>
+                <img th:src="@{/images/junit5_mockito.png}"
+                     alt="JUnit and Mockito logo"
+                     class="col-12 col-md-6 d-inline-block mx-auto">
+            </div>
+
+</main>
+
+
+<footer th:replace="fragments/commons::footer">
+</footer>
+
+<th:block th:replace="fragments/commons::scripts">
+</th:block>
+
+</body>
+</html>

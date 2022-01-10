@@ -10,7 +10,9 @@
 
 <main class="container-fluid">
     <h1 class="text-center text-light my-3" th:text="#{error}"></h1>
-    <img class="mx-auto d-block rounded" th:src="@{/images/errorDino.jpg}" src="" alt="error image">
+    <img class="mx-auto d-block rounded img-fluid"
+         th:src="@{/images/errorDino.jpg}"
+         alt="error image">
 </main>
 
 <footer th:replace="fragments/commons::footer">
