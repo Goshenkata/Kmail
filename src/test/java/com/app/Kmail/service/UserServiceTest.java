@@ -1,5 +1,6 @@
 package com.app.Kmail.service;
 
+import com.app.Kmail.repository.EmailRepository;
 import com.app.Kmail.repository.UserRepository;
 import com.app.Kmail.service.impl.KmailUserServiceImpl;
 import com.app.Kmail.service.impl.UserServiceImpl;
@@ -21,11 +22,13 @@ class UserServiceTest {
     private UserRepository mockUserRepository;
     @Mock
     private KmailUserServiceImpl mockKmailUserService;
+    @Mock
+    private EmailRepository mockEmailRepository;
 
     @BeforeEach
     void setUp() {
         passwordEncoder = new Pbkdf2PasswordEncoder();
-        userService = new UserServiceImpl(mockUserRepository, passwordEncoder, mockKmailUserService);
+        userService = new UserServiceImpl(mockUserRepository, passwordEncoder, mockEmailRepository, mockKmailUserService);
     }
 
 

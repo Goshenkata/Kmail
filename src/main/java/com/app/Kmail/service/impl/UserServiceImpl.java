@@ -1,7 +1,10 @@
 package com.app.Kmail.service.impl;
 
+import com.app.Kmail.model.entity.EmailEntity;
 import com.app.Kmail.model.entity.UserEntity;
 import com.app.Kmail.model.service.UserRegistrationServiceModel;
+import com.app.Kmail.model.view.LoggedInUserIndexViewModel;
+import com.app.Kmail.repository.EmailRepository;
 import com.app.Kmail.repository.UserRepository;
 import com.app.Kmail.service.UserService;
 import org.slf4j.Logger;
@@ -10,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +26,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailRepository emailRepository;
     private final KmailUserServiceImpl kmailUserService;
     private Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, KmailUserServiceImpl kmailUserService) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailRepository emailRepository, KmailUserServiceImpl kmailUserService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailRepository = emailRepository;
         this.kmailUserService = kmailUserService;
     }
 
@@ -109,6 +115,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteAll() {
         userRepository.deleteAll();
+    }
+
+    @Override
+    public LoggedInUserIndexViewModel getData(String name) {
+        LoggedInUserIndexViewModel data = new LoggedInUserIndexViewModel();
+        UsernameNotFoundException usernameNotFoundException =
+                new UsernameNotFoundException("somehow the principal with name " + name + " was not found?????");
+        UserEntity user = userRepository.findByUsername(name)
+                .orElseThrow(() -> usernameNotFoundException);
+
+        data.setFullName(user.getFirstName() + " " + user.getLastName());
+        data.setUnreadMessages((int) emailRepository.findAllByTo(user)
+                .orElseThrow(() -> usernameNotFoundException)
+                .stream()
+                .filter(EmailEntity::isNotRead)
+                .count());
+        return data;
     }
 
 }

@@ -12,15 +12,29 @@
 <main id="jumbotron">
     <div class="p-5 mb-4 rounded-3">
         <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">Kmail</h1>
-            <p class="col-md-6 fs-4" th:text="#{indexParagraph}"></p>
-            <form th:method="get" th:action="@{/about}">
+            <h1 class="display-5 fw-bold" sec:authorize="!isAuthenticated()">Kmail</h1>
+            <p class="col-md-6 fs-4"
+               th:text="#{indexParagraph}"
+               sec:authorize="!isAuthenticated()"></p>
+            <form th:method="get" th:action="@{/about}" sec:authorize="!isAuthenticated()">
             <button class="btn btn-primary btn-lg"
                     type="button"
                     th:type="submit"
                     th:text="#{learnMore}"></button>
             </form>
+            <!-- is logged in -->
+            <th:block sec:authorize="isAuthenticated()" th:object="${userData}">
+                <h1 class="display-5 fw-bold" th:text="|#{welcome}, *{fullName}!|"></h1>
+                <p class="col-md-6 fs-4"
+                    th:if="*{unreadMessages==1}"
+                    th:text="|#{youHave} *{unreadMessages} #{unreadMessage}|"></p>
+                <p class="col-md-6 fs-4"
+                   th:unless="*{unreadMessages==1}"
+                   th:text="|#{youHave} *{unreadMessages} #{unreadMessages}|"></p>
+            </th:block>
         </div>
+
+
     </div>
 </main>
 

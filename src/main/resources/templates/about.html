@@ -10,22 +10,10 @@
 
 
 <main class="text-light p-5">
-    <h1 class="mb-2 text-center">About this project</h1>
-    <p class="mb-2">This project is made by Georgi Kolev, for both educational purposes and as my senior high school
-        project,
-        It emulates an email service, users can send messages and files (up to 25MB) to each other,
-        all data is persisted in a database. The application is secure, all passwords are hashed, user privileges have
-        been thoroughly tested to assure that no user can access data which it shouldn't be able to (like the emails of
-        other users, that would be... bad).
-        This project is internationalised, having support for both English and Bulgarian,
-        it automatically resolves the localization of the user when they visit for a first time, and remembers
-        preferences too!
-        The application also validates every user input on both the front and back end and gives appropriate feedback to
-        the user,
-        as well as other kinds of error-handling (no ugly whitelabel pages!).<br>
-        The source code can be found <a href="https://github.com/Goshenkata/Kmail/">here</a><br>
+    <h1 class="mb-2 text-center" th:text="#{aboutThisProject}"></h1>
+    <p class="mb-2" th:utext="#{aboutParagraph}">
     </p>
-    <h2 class="text-center mb-2">Tech stack</h2>
+    <h2 class="text-center mb-2" th:text="#{stack}"></h2>
     <div class="row">
         <div class="col-12 col-md-6 mb-2">
             <!--FRONTEND-->
@@ -86,7 +74,6 @@
                      class="col-12 col-md-6 d-inline-block mx-auto">
             </div>
 
-
             <!--H2 Databse-->
             <div class="row mb-3">
                 <h4 class="text-center mb-3">H2</h4>
@@ -102,6 +89,7 @@
                      alt="JUnit and Mockito logo"
                      class="col-12 col-md-6 d-inline-block mx-auto">
             </div>
+        </div>
 
 </main>
 

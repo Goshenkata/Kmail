@@ -119,4 +119,7 @@ public class EmailEntity extends BaseEntity {
         return this;
     }
 
+    public boolean isNotRead() {
+        return !isRead;
+    }
 }

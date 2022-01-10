@@ -2,6 +2,7 @@ package com.app.Kmail.service;
 
 import com.app.Kmail.model.entity.UserEntity;
 import com.app.Kmail.model.service.UserRegistrationServiceModel;
+import com.app.Kmail.model.view.LoggedInUserIndexViewModel;
 
 import java.util.Optional;
 
@@ -24,4 +25,6 @@ public interface UserService {
     Optional<UserEntity> findByUsernameWithAddress(String usernameWithAdress);
 
     void deleteAll();
+
+    LoggedInUserIndexViewModel getData(String name);
 }
