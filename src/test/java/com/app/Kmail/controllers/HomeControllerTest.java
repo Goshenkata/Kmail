@@ -25,4 +25,10 @@ class HomeControllerTest {
 
     }
 
+    @Test void getAbout() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/about"))
+                .andExpect(MockMvcResultMatchers.view().name("about"))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+    }
+
 }

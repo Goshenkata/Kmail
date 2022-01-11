@@ -5,8 +5,8 @@ import com.app.Kmail.model.entity.EmailEntity;
 import com.app.Kmail.model.entity.UserEntity;
 import com.app.Kmail.repository.EmailRepository;
 import com.app.Kmail.repository.UserRepository;
+import com.app.Kmail.service.EmailService;
 import com.app.Kmail.service.UserService;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,11 +19,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Arrays;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser("user")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EmailControllerTest {
 
     @Autowired
@@ -34,6 +34,8 @@ class EmailControllerTest {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private EmailService emailService;
 
     private static final MockMultipartFile MULTIPARTFILE = new MockMultipartFile("test.txt", "Hello world!".getBytes());
     private static final String FROM = "user@kmail.com";
@@ -63,12 +65,6 @@ class EmailControllerTest {
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 
-        System.out.println("------------");
-        for (UserEntity user : userRepository.findAll()) {
-            System.out.println(user.getUsername());
-        }
-        System.out.println("------------");
-
         UserEntity userFrom = userService.findByUsernameWithAddress(FROM)
                         .orElseThrow(() -> new UsernameNotFoundException("username " + FROM  + " not found"));
         UserEntity userTo = userService.findByUsernameWithAddress(TO)
@@ -81,6 +77,122 @@ class EmailControllerTest {
         Assertions.assertEquals(TITLE, emailEntity.getTitle());
         Assertions.assertEquals(CONTENT, emailEntity.getContent());
         Assertions.assertArrayEquals(MULTIPARTFILE.getBytes(), emailEntity.getAttachment());
+    }
+
+
+    @Test
+    void sendEmailToNonExistentUser() throws Exception {
+        EmailSendBindingModel emailSendBindingModel = new EmailSendBindingModel();
+        emailSendBindingModel.setFrom(FROM)
+                .setTo("Invalid343543@kmail.com")
+                .setTitle(null)
+                .setContent(CONTENT)
+                .setAttachment(MULTIPARTFILE);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/emails/send")
+                        .flashAttr("emailSendBindingModel", emailSendBindingModel)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/emails/send"));
+        Assertions.assertEquals(0, emailRepository.count());
+    }
+
+    @Test
+    void sendNullEmail() throws Exception {
+        EmailSendBindingModel emailSendBindingModel = new EmailSendBindingModel();
+        emailSendBindingModel.setFrom(FROM)
+                .setTo(TO)
+                .setTitle(null)
+                .setContent(CONTENT)
+                .setAttachment(MULTIPARTFILE);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/emails/send")
+                        .flashAttr("emailSendBindingModel", emailSendBindingModel)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/emails/send"));
+        Assertions.assertEquals(0, emailRepository.count());
+    }
+
+
+    @Test
+    void sendInvalidUser() throws Exception {
+        EmailSendBindingModel emailSendBindingModel = new EmailSendBindingModel();
+        emailSendBindingModel.setFrom("manjaro")
+                .setTo(TO)
+                .setTitle(null)
+                .setContent(CONTENT)
+                .setAttachment(MULTIPARTFILE);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/emails/send")
+                        .flashAttr("emailSendBindingModel", emailSendBindingModel)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/emails/send"));
+        Assertions.assertEquals(0, emailRepository.count());
+    }
+
+    @Test
+    void inbox() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/emails/inbox")
+                .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.view().name("inbox"));
+    }
+
+
+    @Test
+    void sent() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/emails/sent")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.view().name("inbox"));
+    }
+
+    @Test
+    void viewEmailValid() throws Exception {
+        emailService.initEmail();
+        mockMvc.perform(MockMvcRequestBuilders.get("/emails/9")
+                .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("email"));
+    }
+
+
+    @Test
+    void viewEmailInvalid() throws Exception {
+        emailService.initEmail();
+        mockMvc.perform(MockMvcRequestBuilders.get("/emails/4")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    void viewDownloadValid() throws Exception {
+        emailService.initEmail();
+        emailRepository.findAll().forEach(e -> System.out.println(
+                e.getId() + " :: " + e.getFrom().getUsername() + "->" +
+                        e.getTo().getUsername() + "=="+ e.getAttachmentName()));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/emails/20/download")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
+
+    @Test
+    void viewDownloadInvalid() throws Exception {
+        emailService.initEmail();
+        mockMvc.perform(MockMvcRequestBuilders.get("/emails/4/download")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @BeforeAll
+    void initDelete() {
+        emailRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @BeforeEach

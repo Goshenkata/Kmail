@@ -147,7 +147,6 @@ public class EmailController {
     @GetMapping("/{id}") public String viewEmail(@PathVariable("id") Long id,
                             Principal principal,
                             Model model) {
-        //todo error handling, also when file sized are too big
         emailService.emailSeen(id, principal.getName());
         EmailViewModel emailViewModel = emailService.getEmailViewModel(id, principal);
         model.addAttribute("email", emailViewModel);

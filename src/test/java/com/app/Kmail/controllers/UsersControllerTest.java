@@ -1,11 +1,9 @@
 package com.app.Kmail.controllers;
 
 import com.app.Kmail.model.entity.UserEntity;
+import com.app.Kmail.repository.EmailRepository;
 import com.app.Kmail.repository.UserRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +19,7 @@ import java.util.Optional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
 class UsersControllerTest {
 
     @Autowired
@@ -29,6 +28,14 @@ class UsersControllerTest {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private EmailRepository emailRepository;
+
+    @BeforeAll
+    void initDelete() {
+        emailRepository.deleteAll();
+        userRepository.deleteAll();
+    }
 
     private static final String USERNAME = "UserUserov";
     private static final String PASSWORD = "Hunter222";
@@ -53,8 +60,9 @@ class UsersControllerTest {
                         .param("firstName", FIRST_NAME)
                         .param("lastName", LAST_NAME)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
-        Assertions.assertEquals(4, userRepository.count(), "after creating a single user the count is one");
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/"));
+        Assertions.assertEquals(1, userRepository.count(), "after creating a single user the count is one");
         Optional<UserEntity> userOpt = userRepository.findByUsername(USERNAME);
         Assertions.assertTrue(userOpt.isPresent(), "the new user is present in the database");
         UserEntity user = userOpt.get();
@@ -62,6 +70,21 @@ class UsersControllerTest {
         Assertions.assertTrue(passwordEncoder.matches(PASSWORD, user.getPassword()), "decoded password matches");
         Assertions.assertEquals(FIRST_NAME, user.getFirstName(), "the first name matches");
         Assertions.assertEquals(LAST_NAME, user.getLastName(), "the last name matches");
+    }
+
+    @Test
+    void testRegisterPostError() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/users/register")
+                        .param("username", ":)")
+                        .param("password", PASSWORD)
+                        .param("confirmPassword", PASSWORD)
+                        .param("firstName", FIRST_NAME)
+                        .param("lastName", LAST_NAME)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/users/register"));
+        Assertions.assertEquals(0, userRepository.count(), "After failing to create a user tha number of users in the db does not change");
     }
 
     @Test
@@ -79,7 +102,16 @@ class UsersControllerTest {
                 .param(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY, PASSWORD)
                 .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+    }
 
+
+
+    @Test
+    void loginError() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/users/login-error")
+                        .flashAttr("isLoginInvalid", true)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
     private void createUser() {
@@ -90,8 +122,15 @@ class UsersControllerTest {
                 .setFirstName(FIRST_NAME);
         userRepository.save(user);
     }
+
+    @BeforeEach
+    void setUpBlank() {
+        emailRepository.deleteAll();
+        userRepository.deleteAll();
+    }
     @AfterEach
     void tearDown() {
+        emailRepository.deleteAll();
         userRepository.deleteAll();
     }
 

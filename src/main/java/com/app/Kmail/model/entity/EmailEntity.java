@@ -16,7 +16,7 @@ public class EmailEntity extends BaseEntity {
 
     @ManyToOne
     private UserEntity from;
-    @ManyToOne
+    @ManyToOne()
     private UserEntity to;
     @Column(nullable = false)
     private String title;
