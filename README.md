@@ -18,14 +18,14 @@ docker-compose -f docker-compose.yaml up
 ```
 Then go to http://localhost:8080
 # Used techologies
--Spring Boot
--Spring Validation
--Spring Data JPA
--MySQL
--H2 database
--JUnit5
--Mockito
--Spring Test
--Docker
+* Spring Boot
+* Spring Validation
+* Spring Data JPA
+* MySQL
+* H2 database
+* JUnit5
+* Mockito
+* Spring Test
+* Docker
 # Looks cool?
 Consider giving me a ⭐
