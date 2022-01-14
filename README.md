@@ -7,6 +7,8 @@ it automatically resolves the localization of the user when they visit for a fir
 The application also validates every user input on both the front and back end and gives appropriate feedback to the user,
 as well as other kinds of error-handling (no ugly whitelabel pages!). The application has been tested (22 tests with ~90% code coverage) for most corner cases 
 with both unit and integration tests.
+
+![logged in user](screenshot-logged.png)
 # Author
 Georgi Kolev, you can contact me at goshenkataklev@gmail.com
 # Take a look
