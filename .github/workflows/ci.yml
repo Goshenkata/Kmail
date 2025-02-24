@@ -6,8 +6,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: Wait for MySQL to be ready
-      run: sleep 10  # Ensures MySQL is up before running tests (optional)
     - name: Run Tests
       run: ./mvnw test
     - name: Show Test Summary in GitHub UI
