@@ -7,10 +7,12 @@ services:
     command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_bin', '--max-allowed-packet=100M']
     environment:
       - MYSQL_DATABASE=kmail
-      - MYSQL_ALLOW_EMPTY_PASSWORD="yes"
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
   kmail:
     image: goshenkata123/kmail:v5
     ports:
       - "8080:8080"
     environment:
       - MYSQL_HOST=db
+    depends_on:
+      - db
