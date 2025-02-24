@@ -3,21 +3,17 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
-      db:
-        image: mysql:5.7
-        env:
-          MYSQL_DATABASE: kmail
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-        options: >-
-          --health-cmd "mysqladmin ping -h localhost"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Wait for MySQL to be ready
-      run: sleep 20  # Ensures MySQL is up before running tests (optional)
+      run: sleep 10  # Ensures MySQL is up before running tests (optional)
     - name: Run Tests
       run: ./mvnw test
+    - name: Show Test Summary in GitHub UI
+      run: |
+        echo "## Test Summary" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        cat target/surefire-reports/*.txt >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        
