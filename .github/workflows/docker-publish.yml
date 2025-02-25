@@ -41,7 +41,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Run Tests
-        run: ./mvnw clean compile
+        run: ./mvnw clean install
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
