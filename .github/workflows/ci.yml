@@ -6,6 +6,12 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+    - name: Run Super-Linter
+      uses: super-linter/super-linter@v4
+      env:
+        DEFAULT_BRANCH: main
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VALIDATE_JAVA: true
     - name: Run Tests
       run: ./mvnw test
     - name: Display JUnit Test Results
