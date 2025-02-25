@@ -22,7 +22,7 @@ jobs:
       # Display Checkstyle results using reviewdog
     - name: Display Checkstyle results in GitHub PR
       run: |
-        reviewdog -f=checkstyle -reporter=github-pr-review -level=warning -input=checkstyle-report.xml   
+        cat checkstyle-report.xml | reviewdog -f=checkstyle -reporter=github-pr-review -level=warning
     - name: Run Tests
       run: ./mvnw test
     - name: Display JUnit Test Results
