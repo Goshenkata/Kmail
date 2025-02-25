@@ -14,11 +14,10 @@ jobs:
       # Install reviewdog
     - name: Set up reviewdog
       uses: reviewdog/action-setup@v1
-    - name: Install Checkstyle
-      run: |
-        curl -sL https://github.com/checkstyle/checkstyle/releases/latest/download/checkstyle-10.15.0-all.jar -o checkstyle.jar
+    - name: Checkstyle for Java
+      uses: dbelyaev/action-checkstyle@v1.17.3
     - name: Run Checkstyle
-      run: java -jar checkstyle.jar -c /google_checks.xml src/ > checkstyle-report.txt || true
+      run: checkstyle -c /google_checks.xml src/ > checkstyle-report.txt || true
       # Display Checkstyle results using reviewdog
     - name: Display Checkstyle results in GitHub PR
       run: |
