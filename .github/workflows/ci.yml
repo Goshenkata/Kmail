@@ -15,10 +15,10 @@ jobs:
         java-version: ${{env.JAVA_VERSION}}
     - name: Run checkstyle
     - uses: dbelyaev/action-checkstyle@master
-        with:
-          github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review
-          level: warning
+      with:
+        github_token: ${{ secrets.github_token }}
+        reporter: github-pr-review
+        level: warning
   test:
     runs-on: ubuntu-latest
     steps:
