@@ -1,6 +1,24 @@
 name: CI pipeline
 on: [push, pull_request]
+env:
+  JAVA_VERSION: 21
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: ${{env.JAVA_VERSION}}
+    - name: Run checkstyle
+    - uses: dbelyaev/action-checkstyle@master
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          level: warning
   test:
     runs-on: ubuntu-latest
     steps:
@@ -10,18 +28,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: '21'
-      # Install reviewdog
-    - name: Set up reviewdog
-      uses: reviewdog/action-setup@v1
-    - name: Checkstyle for Java
-      uses: dbelyaev/action-checkstyle@v1.17.3
-    - name: Run Checkstyle
-      run: checkstyle -c /google_checks.xml src/ > checkstyle-report.txt || true
-      # Display Checkstyle results using reviewdog
-    - name: Display Checkstyle results in GitHub PR
-      run: |
-        cat checkstyle-report.xml | reviewdog -f=checkstyle -reporter=github-pr-review -level=warning
+        java-version: ${{env.JAVA_VERSION}}
     - name: Run Tests
       run: ./mvnw test
     - name: Display JUnit Test Results
