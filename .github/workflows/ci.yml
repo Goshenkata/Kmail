@@ -1,5 +1,5 @@
 name: CI pipeline
-on: [push, pull_request]
+on: [workflow_call]
 env:
   JAVA_VERSION: 21
 jobs:
