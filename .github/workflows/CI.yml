@@ -27,8 +27,9 @@ jobs:
 
     - name: Generate JUnit Report
       uses: mikepenz/action-junit-report@v5
+      if: success() || failure() # always run even if the previous step fails
       with:
-        test-results: target/surefire-reports/TEST-*.xml
+        report_paths: target/surefire-reports/TEST-*.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
