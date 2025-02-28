@@ -14,7 +14,6 @@ public class EmailSendBindingModel {
     private String title;
     @NotNull
     private String content;
-    @NotNull
     private MultipartFile attachment;
 
     public EmailSendBindingModel setFrom(String from) {

@@ -1,13 +1,7 @@
 package com.app.Kmail.model.entity;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.io.File;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Objects;
 
 @Entity
@@ -22,23 +16,12 @@ public class EmailEntity extends BaseEntity {
     private String title;
     @Column(nullable = false)
     private String content;
-    @Lob
-    private byte[] attachment;
+    @Column()
+    private String attachment;
     @Column(nullable = false)
     private boolean isRead;
     @Column(name = "created", nullable = false)
     private LocalDateTime created;
-    @Column
-    private String attachmentName;
-
-    public String getAttachmentName() {
-        return attachmentName;
-    }
-
-    public EmailEntity setAttachmentName(String attachmentName) {
-        this.attachmentName = attachmentName;
-        return this;
-    }
 
     public boolean isRead() {
         return isRead;
@@ -95,7 +78,7 @@ public class EmailEntity extends BaseEntity {
         return this;
     }
 
-    public byte[] getAttachment() {
+    public String getAttachment() {
         return attachment;
     }
 
@@ -104,17 +87,17 @@ public class EmailEntity extends BaseEntity {
         if (this == o) return true;
         if (!(o instanceof EmailEntity)) return false;
         EmailEntity email = (EmailEntity) o;
-        return isRead == email.isRead && from.equals(email.from) && to.equals(email.to) && title.equals(email.title) && content.equals(email.content) && Arrays.equals(attachment, email.attachment) && created.equals(email.created);
+        return isRead == email.isRead && from.equals(email.from) && to.equals(email.to) && title.equals(email.title) && content.equals(email.content) && attachment.equals(email.attachment) && created.equals(email.created);
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hash(from, to, title, content, isRead, created);
-        result = 31 * result + Arrays.hashCode(attachment);
+        result = 31 * result + attachment.hashCode();
         return result;
     }
 
-    public EmailEntity setAttachment(byte[] attachment) {
+    public EmailEntity setAttachment(String attachment) {
         this.attachment = attachment;
         return this;
     }

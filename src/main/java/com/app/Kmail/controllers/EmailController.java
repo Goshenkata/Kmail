@@ -5,6 +5,7 @@ import com.app.Kmail.model.service.EmailServiceModel;
 import com.app.Kmail.model.view.EmailViewModel;
 import com.app.Kmail.model.view.InboxViewModel;
 import com.app.Kmail.service.EmailService;
+import com.app.Kmail.service.S3Service;
 import com.app.Kmail.service.UserService;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.slf4j.Logger;
@@ -32,14 +33,14 @@ import java.util.List;
 @Controller
 @RequestMapping("/emails")
 public class EmailController {
-
     private final UserService userService;
     private final EmailService emailService;
-    private Logger LOGGER = LoggerFactory.getLogger(EmailController.class);
+    private final S3Service s3Service;
 
-    public EmailController(UserService userService, EmailService emailService) {
+    public EmailController(UserService userService, EmailService emailService, S3Service s3Service) {
         this.userService = userService;
         this.emailService = emailService;
+        this.s3Service = s3Service;
     }
 
     @GetMapping("/send")
@@ -88,28 +89,17 @@ public class EmailController {
     }
 
     private EmailServiceModel toServiceModel(EmailSendBindingModel emailSendBindingModel) throws IOException {
+
         EmailServiceModel emailModel = new EmailServiceModel();
+        String attachmentUrl = s3Service.uploadFile(emailSendBindingModel.getAttachment());
         emailModel.setTo(userService.removeAddress(emailSendBindingModel.getTo()))
                 .setFrom(userService.removeAddress(emailSendBindingModel.getFrom()))
-                .setAttachment(multipartToByteArray(emailSendBindingModel
-                        .getAttachment()))
-                .setAttachmentName(
-                        emailSendBindingModel.getAttachment().getOriginalFilename())
+                .setAttachment(attachmentUrl)
                 .setContent(emailSendBindingModel.getContent())
                 .setTitle(emailSendBindingModel.getTitle())
                 .setCreated(LocalDateTime.now())
                 .setRead(false);
         return emailModel;
-    }
-
-    //this method will convert out multipart file to array of bytes
-    private byte[] multipartToByteArray(MultipartFile attachment) {
-        try {
-            if (attachment.isEmpty()) return null;
-            return attachment.getBytes();
-        } catch (IOException e) {
-            return null;
-        }
     }
 
     @ModelAttribute("emailSendBindingModel")
@@ -156,9 +146,7 @@ public class EmailController {
     @PreAuthorize("@emailServiceImpl.canViewEmail(#id, #principal.name)")
     @GetMapping("/{id}/download")
     @ResponseBody
-    public FileSystemResource downloadAttachment(@PathVariable Long id,
-                                                 Principal principal) throws IOException {
+    public FileSystemResource downloadAttachment(@PathVariable Long id, Principal principal) {
         return emailService.downloadAttachment(id);
     }
-
 }

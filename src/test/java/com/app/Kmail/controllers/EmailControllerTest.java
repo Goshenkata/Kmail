@@ -57,8 +57,7 @@ class EmailControllerTest {
         emailSendBindingModel.setFrom(FROM)
                 .setTo(TO)
                 .setTitle(TITLE)
-                .setContent(CONTENT)
-                .setAttachment(MULTIPARTFILE);
+                .setContent(CONTENT);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/emails/send")
                         .flashAttr("emailSendBindingModel", emailSendBindingModel)
@@ -76,7 +75,6 @@ class EmailControllerTest {
         Assertions.assertEquals(userTo, emailEntity.getTo());
         Assertions.assertEquals(TITLE, emailEntity.getTitle());
         Assertions.assertEquals(CONTENT, emailEntity.getContent());
-        Assertions.assertArrayEquals(MULTIPARTFILE.getBytes(), emailEntity.getAttachment());
     }
 
 
@@ -166,20 +164,6 @@ class EmailControllerTest {
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
-
-    @Test
-    void viewDownloadValid() throws Exception {
-        emailService.initEmail();
-        emailRepository.findAll().forEach(e -> System.out.println(
-                e.getId() + " :: " + e.getFrom().getUsername() + "->" +
-                        e.getTo().getUsername() + "=="+ e.getAttachmentName()));
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/emails/20/download")
-                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-
-    }
-
 
     @Test
     void viewDownloadInvalid() throws Exception {

@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     public void initUsers() {
         //username: user
         //password: user
-        if (userRepository.findAll().size() <= 3) {
+        if (userRepository.count() < 3) {
             UserEntity user = new UserEntity();
             user.setUsername("user");
             user.setFirstName("user");

@@ -1,7 +1,6 @@
 package com.app.Kmail.service.impl;
 
 import com.app.Kmail.exceptions.EmailNotFoundException;
-import com.app.Kmail.exceptions.FileNotFoundException;
 import com.app.Kmail.model.entity.EmailEntity;
 import com.app.Kmail.model.entity.UserEntity;
 import com.app.Kmail.model.service.EmailServiceModel;
@@ -10,6 +9,8 @@ import com.app.Kmail.model.view.InboxViewModel;
 import com.app.Kmail.repository.EmailRepository;
 import com.app.Kmail.repository.UserRepository;
 import com.app.Kmail.service.EmailService;
+import com.app.Kmail.service.S3Service;
+import com.app.Kmail.util.FileNameUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
@@ -17,9 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,13 +30,16 @@ import java.util.stream.Collectors;
 @Service
 public class EmailServiceImpl implements EmailService {
 
-    private final EmailRepository emailRepository;
-    private final UserRepository userRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
 
-    public EmailServiceImpl(EmailRepository emailRepository, UserRepository userRepository) {
+    private final EmailRepository emailRepository;
+    private final UserRepository userRepository;
+    private final S3Service s3Service;
+
+    public EmailServiceImpl(EmailRepository emailRepository, UserRepository userRepository, S3Service s3Service) {
         this.emailRepository = emailRepository;
         this.userRepository = userRepository;
+        this.s3Service = s3Service;
     }
 
     @Override
@@ -53,8 +55,7 @@ public class EmailServiceImpl implements EmailService {
                         .orElseThrow(() -> new UsernameNotFoundException("email-receiving user not found")))
                 .setTo(userRepository.findByUsername(emailServiceModel
                                 .getTo())
-                        .orElseThrow(() -> new UsernameNotFoundException("email-sending user not found")))
-                .setAttachmentName(emailServiceModel.getAttachmentName());
+                        .orElseThrow(() -> new UsernameNotFoundException("email-sending user not found")));
         return emailRepository.save(email);
     }
 
@@ -71,7 +72,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void initEmail() {
-        if (emailRepository.findAll().size() == 0) {
+        if (emailRepository.count() == 0) {
 
             UserEntity user = userRepository.findByUsername("user")
                     .orElseThrow(() -> new UsernameNotFoundException("user not initialized"));
@@ -88,8 +89,7 @@ public class EmailServiceImpl implements EmailService {
                     .setContent("content from user")
                     .setCreated(LocalDateTime.now())
                     .setRead(false)
-                    .setAttachment(null)
-                    .setAttachmentName(null);
+                    .setAttachment(null);
             emailRepository.save(userToDebian);
 
             EmailEntity userToManjaro = new EmailEntity();
@@ -98,9 +98,7 @@ public class EmailServiceImpl implements EmailService {
                     .setTitle("title from user")
                     .setContent("content from user")
                     .setCreated(LocalDateTime.now())
-                    .setRead(false)
-                    .setAttachment("( ͡❛ ͜ʖ ͡❛)".getBytes(StandardCharsets.UTF_8))
-                    .setAttachmentName("important.txt");
+                    .setRead(false);
             emailRepository.save(userToManjaro);
 
 
@@ -112,8 +110,7 @@ public class EmailServiceImpl implements EmailService {
                     .setContent("content from debian")
                     .setCreated(LocalDateTime.now())
                     .setRead(true)
-                    .setAttachment(null)
-                    .setAttachmentName(null);
+                    .setAttachment(null);
             emailRepository.save(debianToUser);
 
             EmailEntity debianToManjaro = new EmailEntity();
@@ -122,9 +119,7 @@ public class EmailServiceImpl implements EmailService {
                     .setTitle("title from debian")
                     .setContent("content from debian")
                     .setCreated(LocalDateTime.now())
-                    .setRead(false)
-                    .setAttachment("( ◑‿◑)ɔ┏🍟--🍔┑٩(^◡^ )".getBytes(StandardCharsets.UTF_8))
-                    .setAttachmentName("important.txt");
+                    .setRead(false);
             emailRepository.save(debianToManjaro);
 
 
@@ -136,8 +131,7 @@ public class EmailServiceImpl implements EmailService {
                     .setContent("content from manjaro")
                     .setCreated(LocalDateTime.now())
                     .setRead(true)
-                    .setAttachment(null)
-                    .setAttachmentName(null);
+                    .setAttachment(null);
             emailRepository.save(manjaroToUser);
 
             EmailEntity manjaroToDebian = new EmailEntity();
@@ -146,9 +140,7 @@ public class EmailServiceImpl implements EmailService {
                     .setTitle("title from manjaro")
                     .setContent("content from manjaro")
                     .setCreated(LocalDateTime.now())
-                    .setRead(false)
-                    .setAttachment("(>‿◠)✌".getBytes(StandardCharsets.UTF_8))
-                    .setAttachmentName("important.txt");
+                    .setRead(false);
             emailRepository.save(manjaroToDebian);
             LOGGER.info("emails initialised");
         }
@@ -185,27 +177,25 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public FileSystemResource downloadAttachment(Long id) {
+        // Retrieve the email entity that contains the S3 attachment URL.
         EmailEntity email = emailRepository.getById(id);
+        String attachmentUrl = email.getAttachment();
 
-        String prefix = email.getAttachmentName().split("\\.")[0];
-        String suffix = "." + email.getAttachmentName().split("\\.")[1];
-        Optional<File> file = Optional.empty();
+        // Extract the S3 key using the S3FileService.
+        String key = s3Service.extractKeyFromUrl(attachmentUrl);
 
-        FileNotFoundException fileNotFoundException = new FileNotFoundException("error processing attachment of email with id: " + id);
+        // Extract the file name and split it into prefix and suffix.
+        String fileName = FileNameUtil.extractFileNameFromKey(key);
+        String prefix = FileNameUtil.extractPrefix(fileName);
+        String suffix = FileNameUtil.extractSuffix(fileName);
+
+        File tempFile;
         try {
-            file = Optional.of(File.createTempFile(prefix, suffix));
-            FileOutputStream fileOutputStream = new FileOutputStream(file
-                    .orElseThrow(() -> fileNotFoundException));
-
-            fileOutputStream.write(email.getAttachment());
-            fileOutputStream.close();
+            tempFile = s3Service.downloadFile(key, prefix, suffix);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error downloading attachment for email with id: " + id, e);
         }
-
-        return new FileSystemResource(file
-                .orElseThrow(() -> fileNotFoundException));
-
+        return new FileSystemResource(tempFile);
     }
 
     private EmailViewModel toEmailViewModel(EmailEntity emailEntity) {
@@ -216,10 +206,9 @@ public class EmailServiceImpl implements EmailService {
                 .setDate(emailEntity.getCreated()
                         .format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy")))
                 .setTitle(emailEntity.getTitle())
-                .setHasAttachment(!(emailEntity.getAttachmentName() == null
-                        || emailEntity.getAttachmentName().isEmpty()))
+                .setHasAttachment(!(emailEntity.getAttachment() == null))
                 .setDownloadFileLink("/emails/" + emailEntity.getId() + "/download")
-                .setAttachmentName(emailEntity.getAttachmentName());
+                .setAttachmentName(emailEntity.getAttachment());
         return emailViewModel;
     }
 

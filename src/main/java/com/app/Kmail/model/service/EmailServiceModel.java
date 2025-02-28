@@ -1,6 +1,7 @@
 package com.app.Kmail.model.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ public class EmailServiceModel {
     private String to;
     private String title;
     private String content;
-    private byte[] attachment;
+    private String attachment;
     private boolean isRead;
     private LocalDateTime created;
     String attachmentName;
@@ -80,11 +81,11 @@ public class EmailServiceModel {
         return this;
     }
 
-    public byte[] getAttachment() {
+    public String getAttachment() {
         return attachment;
     }
 
-    public EmailServiceModel setAttachment(byte []attachment) {
+    public EmailServiceModel setAttachment(String attachment) {
         this.attachment = attachment;
         return this;
     }
