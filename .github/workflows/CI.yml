@@ -26,7 +26,7 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Generate JUnit Report
-      uses: ikepenz/action-junit-report@v5
+      uses: mikepenz/action-junit-report@v5
       with:
         test-results: target/test-logs/TEST-*.xml
 
