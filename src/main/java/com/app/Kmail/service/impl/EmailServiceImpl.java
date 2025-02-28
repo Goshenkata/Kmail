@@ -208,7 +208,7 @@ public class EmailServiceImpl implements EmailService {
                 .setTitle(emailEntity.getTitle())
                 .setHasAttachment(!(emailEntity.getAttachment() == null))
                 .setDownloadFileLink("/emails/" + emailEntity.getId() + "/download")
-                .setAttachmentName(emailEntity.getAttachment());
+                .setAttachmentName(FileNameUtil.extractFileNameFromKey(emailEntity.getAttachment()));
         return emailViewModel;
     }
 

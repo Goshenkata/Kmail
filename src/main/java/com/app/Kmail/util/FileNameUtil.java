@@ -13,6 +13,9 @@ public final class FileNameUtil {
      * @return the file name
      */
     public static String extractFileNameFromKey(String key) {
+        if (key == null) {
+            return null;
+        }
         return key.substring(key.lastIndexOf('/') + 1);
     }
 
