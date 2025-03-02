@@ -1,15 +1,16 @@
 name: Deploy Docker Image to AWS ECR
 on:
-  workflow_run:
-    workflows: ["Java CI with Maven"]
-    types:
-      - completed
-    branches:
-      - master
+  pull_request:
+    branches: master
+  push:
+    branches: master
 jobs:
+  ci:
+    name: Test
+    uses: ./.github/workflows/CI.yml
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest    
+    needs: ci
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -34,5 +35,5 @@ jobs:
         context: .
         push: true
         tags: |
-          ${{ env.ECR_REPOSITORY }}:${{ github.run_number }}-${{ github.sha }}
-          ${{ env.ECR_REPOSITORY }}:latest
+          ${{ env.ECR_REGISTRY }}:${{ github.run_number }}-${{ github.sha }}
+          ${{ env.ECR_REGISTRY }}:latest
