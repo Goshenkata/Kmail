@@ -9,10 +9,10 @@
 name: Java CI with Maven
 
 on:
-  workflow_run:
-    workflows: ["CI"]  # This refers to the name of the first workflow (CI)
-    types:
-      - completed
+  pull_request:
+    branches: master
+  push:
+    branches: master
 jobs:
   test:
     runs-on: ubuntu-latest

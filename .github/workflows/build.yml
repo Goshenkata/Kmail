@@ -1,9 +1,9 @@
 name: Deploy Docker Image to AWS ECR
 on:
-  pull_request:
-    branches: master
-  push:
-    branches: master
+  workflow_run:
+    workflows: ["CI"]  # This refers to the name of the first workflow (CI)
+    types:
+      - completed
 jobs:
   ci:
     name: Test
