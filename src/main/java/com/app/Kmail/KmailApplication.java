@@ -9,5 +9,4 @@ public class KmailApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(KmailApplication.class, args);
 	}
-
 }
