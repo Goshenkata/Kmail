@@ -1,5 +1,6 @@
 package com.app.Kmail.controllers;
 
+import com.app.Kmail.init.DBinit;
 import com.app.Kmail.model.entity.UserEntity;
 import com.app.Kmail.repository.EmailRepository;
 import com.app.Kmail.repository.UserRepository;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -21,6 +23,8 @@ import java.util.Optional;
 @AutoConfigureMockMvc
 @TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
 class UsersControllerTest {
+    @MockBean
+    DBinit dBinit;
 
     @Autowired
     private MockMvc mockMvc;

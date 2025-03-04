@@ -1,5 +1,6 @@
 package com.app.Kmail.controllers;
 
+import com.app.Kmail.init.DBinit;
 import com.app.Kmail.model.binding.EmailSendBindingModel;
 import com.app.Kmail.model.entity.EmailEntity;
 import com.app.Kmail.model.entity.UserEntity;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -25,7 +27,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @WithMockUser("user")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EmailControllerTest {
-
+    @MockBean
+    DBinit dBinit;
     @Autowired
     private EmailRepository emailRepository;
     @Autowired
@@ -150,7 +153,7 @@ class EmailControllerTest {
     @Test
     void viewEmailValid() throws Exception {
         emailService.initEmail();
-        mockMvc.perform(MockMvcRequestBuilders.get("/emails/9")
+        mockMvc.perform(MockMvcRequestBuilders.get("/emails/1")
                 .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("email"));
