@@ -32,7 +32,7 @@ jobs:
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
   build:
-      if: (github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'release'
+      if: github.event_name == 'release'  # Only deploy when a release is created
       environment: CD enviroment
       runs-on: ubuntu-latest    
       needs: ci
@@ -84,5 +84,5 @@ jobs:
         aws deploy create-deployment \
           --application-name kmail \
           --deployment-group-name my-kmail-deployment-group \
-          --revision gitHubLocation={repository=${{ github.repository }},commitId=${{ github.sha }}} \
+          --revision gitHubLocation="repository=${{ github.repository }},commitId=${{ github.sha }}" \
           --description "Deployment triggered by release"
