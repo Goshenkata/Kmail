@@ -82,7 +82,7 @@ jobs:
     - name: Deploy application with CodeDeploy
       run: |
         aws deploy create-deployment \
-          --application-name kmail \
-          --deployment-group-name my-kmail-deployment-group \
-          --revision gitHubLocation="repository=${{ github.repository }},commitId=${{ github.sha }}" \
-          --description "Deployment triggered by release"
+        --application-name kmail \
+        --deployment-group-name my-kmail-deployment-group \
+        --revision "revisionType=GitHub,gitHubLocation={\"repository\":\"${{ github.repository }}\",\"commitId\":\"${{ github.sha }}\"}" \
+        --description "Deployment triggered by release"
