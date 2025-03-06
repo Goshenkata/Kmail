@@ -82,6 +82,6 @@ jobs:
       run: |
         aws deploy create-deployment \
         --application-name kmail \
-        --deployment-group-name my-kmail-deployment-group \
+        --deployment-group-name kmail-deployment-group \
         --revision "{\"revisionType\":\"GitHub\",\"gitHubLocation\":{\"repository\":\"Goshenkata/Kmail\",\"commitId\":\"${{ github.sha }}\"}}" \
         --description "Deployment triggered by release"
