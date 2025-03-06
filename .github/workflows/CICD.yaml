@@ -78,11 +78,10 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
         aws-region: ${{ vars.AWS_REGION }}
-
     - name: Deploy application with CodeDeploy
       run: |
         aws deploy create-deployment \
         --application-name kmail \
         --deployment-group-name my-kmail-deployment-group \
-        --revision "revisionType=GitHub,gitHubLocation={\"repository\":\"${{ github.repository }}\",\"commitId\":\"${{ github.sha }}\"}" \
+        --revision "revisionType=GitHub,gitHubLocation={\"repository\":\"Goshenkata/Kmail\",\"commitId\":\"${{ github.sha }}\"}" \
         --description "Deployment triggered by release"
