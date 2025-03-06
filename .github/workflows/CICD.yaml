@@ -65,6 +65,7 @@ jobs:
             ${{ vars.ECR_REGISTRY }}:latest
   deploy:
     runs-on: ubuntu-latest
+    environment: CD enviroment
     needs: build  # Ensure deployment only happens after build job finishes
     if: github.event_name == 'release'  # Only deploy when a release is created
     steps:
