@@ -84,5 +84,5 @@ jobs:
         aws deploy create-deployment \
           --application-name kmail \
           --deployment-group-name my-kmail-deployment-group \
-          --revision revisionType=GitHub,repository=${{ github.repository }},commitId=${{ github.sha }} \
+          --revision gitHubLocation={repository=${{ github.repository }},commitId=${{ github.sha }}} \
           --description "Deployment triggered by release"
