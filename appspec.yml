@@ -1,10 +1,6 @@
 version: 0.0
 os: linux
 hooks:
-  BeforeInstall:
-  - location: /bin/true
-    timeout: 60
-    runas: root
   ApplicationStop:
     - location: /home/ec2-user/stop.sh
       timeout: 60
