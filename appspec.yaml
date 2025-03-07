@@ -3,9 +3,9 @@ os: linux
 hooks:
   ApplicationStop:
     - location: /home/ec2-user/stop.sh
-      timeout: 300
+      timeout: 60
       runas: root
   ApplicationStart:
     - location: /home/ec2-user/start.sh
-      timeout: 300
+      timeout: 60
       runas: root
